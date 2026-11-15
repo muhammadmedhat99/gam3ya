@@ -25,6 +25,23 @@ hosted Supabase Postgres (server-only access) · Zod · React Hook Form · Vites
 5. Verify the hosted database: `node --env-file=.env.local scripts/check-db.mts`
 6. `npm run dev`
 
+## Deploy (Vercel)
+
+1. Vercel → **Add New → Project** → import the GitHub repo. Framework: Next.js (auto).
+2. **Environment Variables** (Production and Preview):
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+   - `SUPABASE_SECRET_KEY` (secret key; server-only, never `NEXT_PUBLIC_`)
+   - `SUPER_ADMIN_PHONE` (reserves the owner's phone at registration)
+3. **Settings → Functions → Region**: pick the region closest to the Supabase project
+   (e.g. Frankfurt `fra1` for `eu-central-1`).
+4. Deploy. Every push to `main` deploys to production.
+5. Smoke test: `/login`, `/manifest.webmanifest`, `/offline`; log in; install from the
+   browser menu on a phone (the service worker runs in production builds only).
+
+Migrations are not run by Vercel: apply new files in `supabase/migrations/` through the
+SQL Editor first, record them in `supabase/APPLIED.md`, then deploy.
+
 ## Scripts
 
 - `npm test`: unit tests plus database tests. The DB tests run every migration in
