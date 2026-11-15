@@ -40,6 +40,7 @@ const PRIVATE_TABLES = [
   "payout_records",
   "payout_allocations",
   "payout_disbursements",
+  "notifications",
 ];
 
 // Views have no "id" column; checked separately below.

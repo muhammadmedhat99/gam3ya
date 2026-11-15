@@ -1,11 +1,15 @@
 import { BottomNav } from "@/components/layout/bottom-nav";
+import { requireUser } from "@/server/auth/dal";
+import { countUnread } from "@/server/services/notifications";
 
-/** Screens with the bottom navigation (design: 4 tabs). */
-export default function TabsLayout({ children }: LayoutProps<"/">) {
+/** Screens with the bottom navigation (design: 4 tabs, unread badge on الإشعارات). */
+export default async function TabsLayout({ children }: LayoutProps<"/">) {
+  const user = await requireUser();
+  const unread = await countUnread(user.id);
   return (
     <>
       <div className="flex flex-1 flex-col pb-[88px]">{children}</div>
-      <BottomNav />
+      <BottomNav unread={unread} />
     </>
   );
 }

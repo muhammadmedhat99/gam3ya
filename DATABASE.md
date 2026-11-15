@@ -338,19 +338,25 @@ owner/admin only.
 In-app notification inbox.
 
   Column         Type          Rules
-  -------------- ------------- -----------------------
+  -------------- ------------- -------------------------------------------
   `id`           uuid          PK
   `user_id`      uuid          FK users.id
   `group_id`     uuid          nullable FK groups.id
-  `type`         text          NOT NULL
+  `type`         text          NOT NULL (link_request, link_approved, …)
   `title`        text          NOT NULL
   `body`         text          NOT NULL
-  `data`         jsonb         NOT NULL DEFAULT '{}'
+  `data`         jsonb         NOT NULL DEFAULT '{}' (e.g. in-app `href`)
+  `dedupe_key`   text          nullable; unique per user (daily reminders)
   `read_at`      timestamptz   nullable
   `created_at`   timestamptz   NOT NULL
 
-Do not put another member's payment status or overdue details in
-member-facing notification content.
+Event notifications are created by an AFTER INSERT trigger on
+`activity_logs` (`notify_from_activity`), so they're atomic with the
+audited action. Time-based ones come from `notify_daily()` (turn in 3
+days → owners of that slot; collection due tomorrow and overdue the day
+after → owners/admins/collectors only), scheduled daily with pg_cron.
+Member-facing notifications never contain payment status; a rejected
+link request has no `group_id` and doesn't name the association.
 
 ### 3.15 `push_subscriptions`
 

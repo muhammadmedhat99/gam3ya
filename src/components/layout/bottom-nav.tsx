@@ -23,7 +23,7 @@ const TABS: { href: string; label: string; icon: ReactNode; match: (p: string) =
 ];
 
 /** Design "Bottom navigation · 4 تابات". */
-export function BottomNav() {
+export function BottomNav({ unread = 0 }: { unread?: number }) {
   const pathname = usePathname();
   return (
     <nav
@@ -42,13 +42,21 @@ export function BottomNav() {
             }`}
           >
             <span
-              className={`flex h-8 w-[60px] items-center justify-center rounded-full ${
+              className={`relative flex h-8 w-[60px] items-center justify-center rounded-full ${
                 active ? "bg-brand-100" : ""
               }`}
             >
               {tab.icon}
+              {tab.href === "/notifications" && unread > 0 && (
+                <span className="absolute -top-1 end-2.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-surface bg-brand-600 px-1 text-[11px] font-bold text-white">
+                  {unread > 99 ? "99+" : unread}
+                </span>
+              )}
             </span>
-            <span className={`text-micro ${active ? "font-bold" : ""}`}>{tab.label}</span>
+            <span className={`text-micro ${active ? "font-bold" : ""}`}>
+              {tab.label}
+              {tab.href === "/notifications" && unread > 0 && <span className="sr-only"> ({unread} جديد)</span>}
+            </span>
           </Link>
         );
       })}
