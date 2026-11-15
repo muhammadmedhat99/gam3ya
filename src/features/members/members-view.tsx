@@ -150,7 +150,7 @@ export function MembersView({
         <Button
           size="lg"
           onPress={() => setAdding(true)}
-          className="fixed bottom-24 z-20 h-14 rounded-[18px] shadow-e2 end-[max(1rem,calc(50%-14rem+1rem))]"
+          className="fixed bottom-[calc(var(--nav-height)+16px)] z-20 h-14 rounded-[18px] shadow-e2 end-[max(1rem,calc(50%-14rem+1rem))]"
         >
           <PlusIcon />
           ضيف عضو

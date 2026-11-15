@@ -157,6 +157,21 @@ body {
   color: var(--color-body);
 }
 
+/* Height of the fixed bottom navigation, including the iPhone home-indicator area.
+   Anything fixed above the nav (FABs, sticky save bars) is offset by this. */
+:root {
+  --nav-height: calc(60px + max(14px, env(safe-area-inset-bottom)));
+}
+
+@keyframes link-pending {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-200%);
+  }
+}
+
 /* Amounts, phones, dates line up in columns */
 .tabular {
   font-variant-numeric: tabular-nums;
