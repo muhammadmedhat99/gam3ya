@@ -409,17 +409,59 @@ describe("reorder_payouts", () => {
 
     await server("select public.reorder_payouts($1, $2, $3)", [owner.id, groupId, newOrder]);
 
-    const rows = await server<{ slot_number: number }>(
-      "select slot_number from public.group_slots where group_id = $1 order by payout_order",
+    // The slots (and whoever owns them) moved; the names stay 1..N = the turn order.
+    const rows = await server<{ id: string; slot_number: number; payout_order: number }>(
+      "select id, slot_number, payout_order from public.group_slots where group_id = $1 order by payout_order",
       [groupId],
     );
-    expect(rows.map((r) => r.slot_number)).toEqual([3, 1, 4, 2]);
+    expect(rows.map((r) => r.id)).toEqual(newOrder);
+    expect(rows.map((r) => [r.slot_number, r.payout_order])).toEqual([
+      [1, 1],
+      [2, 2],
+      [3, 3],
+      [4, 4],
+    ]);
 
     const [log] = await server<{ metadata: { before: number[]; after: number[] } }>(
       "select metadata from public.activity_logs where group_id = $1 and action = 'group.payout_order_changed'",
       [groupId],
     );
     expect(log.metadata).toMatchObject({ before: [1, 2, 3, 4], after: [3, 1, 4, 2] });
+  });
+
+  it("moving the first name to 5th keeps names 1..N and moves the owners", async () => {
+    const owner = await createUser();
+    const groupId = await createGroup(owner.id, 6);
+    const ids = await slotIds(groupId);
+    const people = ["أ", "ب", "ج", "د", "ه", "و"];
+    for (const [i, name] of people.entries()) {
+      const m = await addMember(owner.id, groupId, name);
+      await server("select public.set_slot_allocations($1, $2, $3::jsonb)", [
+        owner.id,
+        ids[i],
+        JSON.stringify([{ member_id: m, amount: "1000" }]),
+      ]);
+    }
+    // Move "اسم 1" (owner أ) to the 5th turn.
+    const newOrder = [ids[1], ids[2], ids[3], ids[4], ids[0], ids[5]];
+    await server("select public.reorder_payouts($1, $2, $3)", [owner.id, groupId, newOrder]);
+
+    const rows = await server<{ slot_number: number; owner: string }>(
+      `select s.slot_number, m.display_name as owner
+         from public.group_slots s
+         join public.slot_allocations a on a.slot_id = s.id
+         join public.group_members m on m.id = a.member_id
+        where s.group_id = $1 order by s.slot_number`,
+      [groupId],
+    );
+    expect(rows).toEqual([
+      { slot_number: 1, owner: "ب" },
+      { slot_number: 2, owner: "ج" },
+      { slot_number: 3, owner: "د" },
+      { slot_number: 4, owner: "ه" },
+      { slot_number: 5, owner: "أ" },
+      { slot_number: 6, owner: "و" },
+    ]);
   });
 
   it("rejects missing, duplicated or foreign slots, and non-managers", async () => {

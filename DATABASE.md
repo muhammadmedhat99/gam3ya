@@ -200,6 +200,8 @@ position.
   `created_at`     timestamptz   NOT NULL
   `updated_at`     timestamptz   NOT NULL
 
+Active slots always have `slot_number = payout_order` ("اسم N" is the Nth turn): `renumber_slots()` runs after every reorder or slot-count change, so the people (allocations) move between names while the names stay 1..N. Inactive slots are numbered after the active ones.
+
 Constraints: - Unique `(group_id, slot_number)`. - Unique
 `(group_id, payout_order)` for active slots, implemented with a partial
 unique index if appropriate. - Payout order is assigned to the slot,

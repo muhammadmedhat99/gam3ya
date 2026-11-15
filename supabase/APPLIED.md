@@ -14,3 +14,4 @@ after it succeeds, then run `node --env-file=.env.local scripts/check-db.mts`.
 | `20261115200139_settings_roles_completion.sql` | 2026-11-15 | Verified by `check-db.mts`; new functions respond, anon denied, roles embed ok |
 | `20261115200746_notifications.sql` | 2026-11-15 | Verified by `check-db.mts`; anon denied. Cron job `gam3ya-daily-notifications` confirmed in Dashboard |
 | `20261115201001_super_admin.sql` | 2026-11-15 | Verified: non-admin actor and anon refused; admin embeds ok |
+| `20261115210127_slot_numbers_follow_order.sql` | 2026-11-15 | Verified: renumber_slots exists; all active slots have slot_number = payout_order |
