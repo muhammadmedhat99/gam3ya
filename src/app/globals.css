@@ -1,0 +1,333 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+/*
+ * جمعيتي design system 0.1 (light).
+ * Source: Claude Design canvas "جمعيتي — نظام التصميم والشاشات",
+ * boards "الألوان", "الخط والمسافات", "التوكنز للتنفيذ", "كومبوننتس 1/2".
+ * Screens use these token names only, so dark mode later = another value table.
+ */
+
+/* ---------------------------------------------------------------- tokens */
+
+@theme {
+  --font-sans: var(--font-arabic), "Noto Sans Arabic", system-ui, sans-serif;
+
+  /* Brand: dark petrol blue, like ballpoint ink */
+  --color-brand-50: #eaf3f4;
+  --color-brand-100: #d2e6e9;
+  --color-brand-200: #a6cdd4;
+  --color-brand-600: #0e6474;
+  --color-brand-700: #0a4e5a;
+  --color-brand-800: #094955;
+
+  /* Warm neutrals, like notebook paper */
+  --color-paper: #f7f5f0;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1eee7;
+  --color-sunken: #e9e4da;
+  --color-ink: #1f1d1a;
+  --color-body: #3a3631;
+  --color-muted: #6b655c;
+  --color-placeholder: #7a7368;
+  --color-line: #e4dfd5;
+  --color-line-strong: #cbc3b5;
+  --color-disabled: #ece8e1;
+  --color-disabled-fg: #8e877c;
+
+  /* Feedback */
+  --color-danger: #b42318;
+  --color-danger-soft: #fdecea;
+  --color-danger-line: #f4c7c2;
+  --color-warning: #7a4e0b;
+  --color-warning-soft: #fbf1df;
+  --color-warning-line: #ebd3a6;
+
+  /* Payment status: ADMIN SCREENS ONLY (BUSINESS_RULES.md §7, §9) */
+  --color-paid: #17603a;
+  --color-paid-soft: #e5f3ea;
+  --color-paid-line: #bfe0cb;
+  --color-partial: #8a5300;
+  --color-partial-soft: #fdf0d8;
+  --color-partial-line: #f1d29a;
+  --color-unpaid: #4a453e;
+  --color-unpaid-soft: #eeebe5;
+  --color-unpaid-line: #d6d0c5;
+  --color-overdue: #a3241a;
+  --color-overdue-soft: #fce8e5;
+  --color-overdue-line: #f1c0b9;
+
+  /* Slot owners in split bars */
+  --color-owner-1: #0e6474;
+  --color-owner-2: #8fc3cc;
+  --color-owner-3: #c9a66b;
+
+  /* Type scale (size / line-height · weight) */
+  --text-display: 28px;
+  --text-display--line-height: 40px;
+  --text-display--font-weight: 700;
+  --text-title-1: 22px;
+  --text-title-1--line-height: 34px;
+  --text-title-1--font-weight: 700;
+  --text-title-2: 18px;
+  --text-title-2--line-height: 28px;
+  --text-title-2--font-weight: 600;
+  --text-title-3: 16px;
+  --text-title-3--line-height: 26px;
+  --text-title-3--font-weight: 600;
+  --text-body: 16px;
+  --text-body--line-height: 26px;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 22px;
+  --text-label: 14px;
+  --text-label--line-height: 20px;
+  --text-label--font-weight: 600;
+  --text-caption: 13px;
+  --text-caption--line-height: 20px;
+  --text-micro: 12px;
+  --text-micro--line-height: 16px;
+  --text-micro--font-weight: 500;
+  --text-amount-xl: 34px;
+  --text-amount-xl--line-height: 44px;
+  --text-amount-xl--font-weight: 700;
+  --text-amount-lg: 26px;
+  --text-amount-lg--line-height: 34px;
+  --text-amount-lg--font-weight: 700;
+  --text-amount-md: 18px;
+  --text-amount-md--line-height: 26px;
+  --text-amount-md--font-weight: 600;
+  --text-amount-sm: 15px;
+  --text-amount-sm--line-height: 22px;
+  --text-amount-sm--font-weight: 600;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Elevation: soft and warm */
+  --shadow-e1: 0 1px 2px rgba(31, 29, 26, 0.06), 0 1px 1px rgba(31, 29, 26, 0.04);
+  --shadow-e2: 0 6px 16px rgba(31, 29, 26, 0.08), 0 1px 3px rgba(31, 29, 26, 0.06);
+  --shadow-e3: 0 -10px 30px rgba(31, 29, 26, 0.14);
+}
+
+/* HeroUI v3 theme variables mapped to our tokens (unlayered, so they win over HeroUI's base layer). */
+:root {
+  --background: #f7f5f0;
+  --foreground: #1f1d1a;
+  --surface: #ffffff;
+  --surface-foreground: #1f1d1a;
+  --surface-secondary: #f1eee7;
+  --overlay: #ffffff;
+  --overlay-foreground: #1f1d1a;
+  --default: #e9e4da;
+  --default-foreground: #1f1d1a;
+  --muted: #6b655c;
+  --border: #e4dfd5;
+  --separator: #e4dfd5;
+  --accent: #0e6474;
+  --accent-foreground: #ffffff;
+  --accent-soft: #eaf3f4;
+  --accent-soft-foreground: #0a4e5a;
+  --focus: #0e6474;
+  --link: #0a4e5a;
+  --danger: #b42318;
+  --danger-foreground: #ffffff;
+  --danger-soft: #fdecea;
+  --danger-soft-foreground: #b42318;
+  --warning: #7a4e0b;
+  --success: #17603a;
+  --field-background: #ffffff;
+  --field-foreground: #1f1d1a;
+  --field-placeholder: #7a7368;
+  --field-border: #cbc3b5;
+  --field-radius: 12px;
+  --radius: 12px;
+  --backdrop: rgba(31, 29, 26, 0.48);
+}
+
+html {
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-body);
+}
+
+/* Amounts, phones, dates line up in columns */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------- HeroUI component overrides */
+
+/* Buttons: min 44px, md 44 / lg 52 full-width CTA */
+.button {
+  height: 44px;
+  padding-inline: 16px;
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  font-weight: 600;
+}
+.button--lg {
+  height: 52px;
+  padding-inline: 20px;
+  border-radius: 14px;
+  font-size: 16px;
+}
+.button--icon-only {
+  width: 44px;
+  padding: 0;
+}
+.button--primary {
+  --button-bg: var(--color-brand-600);
+  --button-bg-hover: #0b5866;
+  --button-bg-pressed: var(--color-brand-800);
+  --button-fg: #ffffff;
+}
+.button--secondary {
+  --button-bg: var(--color-brand-50);
+  --button-bg-hover: #ddedef;
+  --button-bg-pressed: var(--color-brand-100);
+  --button-fg: var(--color-brand-700);
+}
+.button--outline {
+  border: 1.5px solid var(--color-line-strong);
+  --button-bg: #ffffff;
+  --button-bg-hover: var(--color-surface-2);
+  --button-bg-pressed: var(--color-surface-2);
+  --button-fg: var(--color-ink);
+}
+.button--ghost {
+  --button-bg: transparent;
+  --button-bg-hover: var(--color-brand-50);
+  --button-bg-pressed: var(--color-brand-50);
+  --button-fg: var(--color-brand-700);
+}
+.button--danger {
+  --button-bg: var(--color-danger);
+  --button-bg-hover: #a01f15;
+  --button-bg-pressed: #8f1c13;
+  --button-fg: #ffffff;
+}
+.button:focus-visible,
+.button[data-focus-visible="true"] {
+  outline: none;
+  box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px var(--color-brand-600);
+}
+.button:disabled,
+.button[aria-disabled="true"],
+.button[data-disabled="true"] {
+  opacity: 1;
+  --button-bg: var(--color-disabled);
+  --button-bg-hover: var(--color-disabled);
+  --button-fg: var(--color-disabled-fg);
+}
+.button--ghost:disabled,
+.button--ghost[data-disabled="true"] {
+  --button-bg: transparent;
+}
+
+/* Fields: 52px, 16px text (no iOS zoom), 1.5px border */
+.label {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+.input-group {
+  height: 52px;
+  min-height: 52px;
+  gap: 10px;
+  padding-inline: 14px;
+  border: 1.5px solid var(--color-line-strong);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  box-shadow: none;
+}
+.input-group:has(.input-group__suffix button) {
+  padding-inline-end: 4px;
+}
+.input-group:has(input:focus) {
+  border-color: var(--color-brand-600);
+  box-shadow: 0 0 0 3px var(--color-brand-100);
+}
+.input-group:has(input[aria-invalid="true"]),
+.input-group[data-invalid="true"] {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--color-danger-soft);
+}
+.input-group:has(input:disabled),
+.input-group[data-disabled="true"] {
+  opacity: 1;
+  background: var(--color-disabled);
+}
+.input-group__input {
+  height: 100%;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+.input-group__input:disabled {
+  color: var(--color-disabled-fg);
+}
+.input-group__input::placeholder {
+  color: var(--color-placeholder);
+  opacity: 1;
+}
+.input-group__prefix,
+.input-group__suffix {
+  color: var(--color-muted);
+  background: transparent;
+  padding: 0;
+}
+.field-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--color-danger);
+}
+
+/* Alerts: icon + title + sentence */
+.alert {
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--color-line);
+}
+.alert--danger {
+  background: var(--color-danger-soft);
+  border-color: var(--color-danger-line);
+}
+.alert--accent {
+  background: var(--color-brand-50);
+  border-color: var(--color-brand-100);
+}
+.alert--warning {
+  background: var(--color-warning-soft);
+  border-color: var(--color-warning-line);
+}
+.alert__title {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+.alert__description {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--color-body);
+}
+
+/* Bottom sheet */
+.drawer__content--bottom {
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: var(--shadow-e3);
+}
