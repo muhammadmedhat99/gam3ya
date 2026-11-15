@@ -2,6 +2,7 @@ import { Button } from "@heroui/react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/layout/page-header";
+import { ShowInstallButton } from "@/components/pwa/show-install-button";
 import { ChevronIcon, LockIcon, ShieldCheckIcon } from "@/components/ui/icons";
 import { formatEgyptPhone } from "@/lib/phone";
 import { logoutAction } from "@/server/actions/auth";
@@ -45,6 +46,7 @@ export default async function ProfilePage() {
             <span className="flex-1 text-body-sm font-semibold text-ink">غيّر كلمة السر</span>
             <ChevronIcon className="text-muted" />
           </Link>
+          <ShowInstallButton />
         </nav>
 
         <form action={logoutAction}>
