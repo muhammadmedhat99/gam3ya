@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { SESSION_COOKIE } from "@/lib/auth/cookie";
 
-const PUBLIC_PATHS = new Set(["/login", "/register"]);
+const PUBLIC_PATHS = new Set(["/login", "/register", "/offline"]);
 
 /**
  * Optimistic check only: no cookie → send to /login.
@@ -19,5 +19,8 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|icons/|.*\\.(?:png|svg|jpg|ico|webp)$).*)"],
+  // Static assets, the PWA files (manifest, service worker, icons) and Next internals skip the proxy.
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|icons/|icon|apple-icon|.*\\.(?:png|svg|jpg|ico|webp)$).*)",
+  ],
 };
