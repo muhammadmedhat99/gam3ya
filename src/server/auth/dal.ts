@@ -1,5 +1,6 @@
 import "server-only";
 import { notFound, redirect } from "next/navigation";
+import { after } from "next/server";
 import { cache } from "react";
 import { db } from "@/lib/supabase/admin";
 import { currentTokenHash } from "./session";
@@ -55,10 +56,10 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
 
   const lastSeen = data.last_seen_at ? new Date(data.last_seen_at).getTime() : 0;
   if (Date.now() - lastSeen > LAST_SEEN_THROTTLE_MS) {
-    await db()
-      .from("user_sessions")
-      .update({ last_seen_at: new Date().toISOString() })
-      .eq("id", data.id);
+    // Bookkeeping only: run it after the response so it never slows a page down.
+    after(async () => {
+      await db().from("user_sessions").update({ last_seen_at: new Date().toISOString() }).eq("id", data.id);
+    });
   }
 
   return {

@@ -38,6 +38,9 @@ export interface GroupSummary {
   /** Due date of the next collection that hasn't passed yet. */
   nextDueOn: string | null;
   myShares: MyShare[];
+  startDate: string;
+  dueDay: number;
+  ownerName: string;
 }
 
 interface GroupRow {
@@ -48,6 +51,7 @@ interface GroupRow {
   start_date: string;
   collection_due_day: number;
   status: GroupStatus;
+  users: { full_name: string };
 }
 
 interface SlotRow {
@@ -71,42 +75,50 @@ function check<T>(res: { data: T | null; error: { message: string } | null }, wh
   return res.data as T;
 }
 
-export async function listMyGroups(userId: string): Promise<GroupSummary[]> {
-  const [roles, memberships] = await Promise.all([
-    db().from("group_roles").select("group_id, role").eq("user_id", userId),
-    db().from("group_members").select("id, group_id").eq("user_id", userId).eq("status", "active"),
-  ]);
+/**
+ * All groups the user can open, or just one (`onlyGroupId`). Two round trips:
+ * (roles ∥ memberships), then (groups ∥ slots ∥ allocations).
+ */
+export async function listMyGroups(userId: string, onlyGroupId?: string): Promise<GroupSummary[]> {
+  let rolesQuery = db().from("group_roles").select("group_id, role").eq("user_id", userId);
+  let membersQuery = db().from("group_members").select("id, group_id").eq("user_id", userId).eq("status", "active");
+  if (onlyGroupId) {
+    rolesQuery = rolesQuery.eq("group_id", onlyGroupId);
+    membersQuery = membersQuery.eq("group_id", onlyGroupId);
+  }
+  const [roles, memberships] = await Promise.all([rolesQuery, membersQuery]);
   const roleRows = check(roles, "roles") as { group_id: string; role: GroupRole }[];
   const memberRows = check(memberships, "memberships") as { id: string; group_id: string }[];
 
   const groupIds = [...new Set([...roleRows.map((r) => r.group_id), ...memberRows.map((m) => m.group_id)])];
   if (groupIds.length === 0) return [];
 
-  const [groupsRes, slotsRes] = await Promise.all([
+  const [groupsRes, slotsRes, allocationsRes] = await Promise.all([
     db()
       .from("groups")
-      .select("id, name, slot_amount::text, frequency, start_date, collection_due_day, status")
-      .in("id", groupIds),
+      .select(
+        "id, name, slot_amount::text, frequency, start_date, collection_due_day, status, users!groups_owner_user_id_fkey(full_name)",
+      )
+      .in("id", groupIds)
+      .returns<GroupRow[]>(),
     db()
       .from("group_slots")
       .select("id, group_id, slot_number, payout_order")
       .in("group_id", groupIds)
       .neq("status", "inactive"),
+    db()
+      .from("slot_allocations")
+      .select("slot_id, member_id, amount::text, group_members!inner(display_name, group_id)")
+      .in("group_members.group_id", groupIds)
+      // many-to-one embed: PostgREST returns an object, not an array
+      .returns<AllocationRow[]>(),
   ]);
   const groups = check(groupsRes, "groups") as GroupRow[];
   const slots = check(slotsRes, "slots") as SlotRow[];
-
-  const allocations = slots.length
-    ? (check(
-        await db()
-          .from("slot_allocations")
-          .select("slot_id, member_id, amount::text, group_members!inner(display_name)")
-          .in("slot_id", slots.map((s) => s.id))
-          // many-to-one embed: PostgREST returns an object, not an array
-          .returns<AllocationRow[]>(),
-        "allocations",
-      ) as AllocationRow[])
-    : [];
+  const activeSlotIds = new Set(slots.map((s) => s.id));
+  const allocations = (check(allocationsRes, "allocations") as AllocationRow[]).filter((a) =>
+    activeSlotIds.has(a.slot_id),
+  );
 
   const myMemberIds = new Set(memberRows.map((m) => m.id));
   const roleByGroup = new Map(roleRows.map((r) => [r.group_id, r.role]));
@@ -169,6 +181,9 @@ export async function listMyGroups(userId: string): Promise<GroupSummary[]> {
           : null,
       nextDueOn: g.status === "active" ? (schedule.find((c) => c.dueOn >= today)?.dueOn ?? null) : null,
       myShares,
+      startDate: g.start_date,
+      dueDay: g.collection_due_day,
+      ownerName: g.users.full_name,
     };
   });
 
@@ -238,5 +253,5 @@ export async function adminTasks(groups: GroupSummary[]): Promise<AdminTask[]> {
  */
 export async function getGroupForUser(groupId: string, userId: string): Promise<GroupSummary | null> {
   if (!/^[0-9a-f-]{36}$/i.test(groupId)) return null;
-  return (await listMyGroups(userId)).find((g) => g.id === groupId) ?? null;
+  return (await listMyGroups(userId, groupId))[0] ?? null;
 }

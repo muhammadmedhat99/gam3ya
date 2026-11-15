@@ -50,6 +50,37 @@ export function CardSkeleton() {
   );
 }
 
+/**
+ * Route-level loading fallback (loading.tsx): appears instantly on navigation
+ * while the server renders the real page.
+ */
+export function PageSkeleton({
+  header = true,
+  cards = 3,
+  hero = false,
+}: {
+  header?: boolean;
+  cards?: number;
+  hero?: boolean;
+}) {
+  return (
+    <div aria-busy="true" aria-live="polite" className="flex flex-col">
+      <span className="sr-only">بيحمّل…</span>
+      {header && (
+        <div className="flex min-h-16 items-center gap-3 border-b border-line bg-surface px-4">
+          <Skeleton className="h-5 w-36" />
+        </div>
+      )}
+      <div className="flex flex-col gap-3 px-4 pt-4">
+        {hero && <Skeleton className="h-28 w-full rounded-lg" />}
+        {Array.from({ length: cards }, (_, i) => (
+          <CardSkeleton key={i} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /** Progress bar from the design (6px, sunken track, brand fill). */
 export function Progress({ value, max, label }: { value: number; max: number; label: string }) {
   const pct = max > 0 ? Math.min(100, (value / max) * 100) : 0;

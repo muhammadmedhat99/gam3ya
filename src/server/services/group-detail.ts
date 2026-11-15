@@ -28,19 +28,12 @@ export const requireGroupAccess = cache(async (groupId: string): Promise<GroupCo
   const group = await getGroupForUser(groupId, user.id);
   if (!group) notFound();
 
-  const { data, error } = await db()
-    .from("groups")
-    .select("start_date, collection_due_day, users!groups_owner_user_id_fkey(full_name)")
-    .eq("id", groupId)
-    .single<{ start_date: string; collection_due_day: number; users: { full_name: string } }>();
-  if (error) throw new Error(`group context: ${error.message}`);
-
   return {
     user,
     group,
-    startDate: data.start_date,
-    dueDay: data.collection_due_day,
-    ownerName: data.users.full_name,
+    startDate: group.startDate,
+    dueDay: group.dueDay,
+    ownerName: group.ownerName,
   };
 });
 
