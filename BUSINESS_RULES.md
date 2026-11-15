@@ -125,6 +125,21 @@ entire pot to either person. See section 8.
     each slot every cycle and is paid once per slot (cycle 1 and cycle
     10).
 
+### Completing an association
+
+-   The association completes automatically when the last cycle's payout
+    has been fully handed over to every owner of that slot.
+-   An owner/admin may also close it manually once the last cycle has
+    started.
+-   After completion, late payments and remaining payouts can still be
+    recorded (and corrected) so arrears can be settled.
+
+### Roles inside an association
+
+-   Only the owner adds or removes admins; owners and admins add or
+    remove collectors. The owner's role can't be changed or removed.
+-   Roles go to members of the association with a linked account.
+
 ## 6. Cycles and Contributions
 
 A cycle is generated for each scheduled period.

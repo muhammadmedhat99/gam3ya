@@ -199,6 +199,50 @@ export async function getGroupSlots(ctx: GroupContext): Promise<SlotRow[]> {
   });
 }
 
+// --------------------------------------------------------------------------- roles
+
+export interface RoleRow {
+  userId: string;
+  name: string;
+  role: "owner" | "admin" | "collector";
+  isMe: boolean;
+}
+
+/** Managers only: current roles and the linked members who could get one. */
+export async function getGroupRoles(
+  ctx: GroupContext,
+): Promise<{ roles: RoleRow[]; candidates: { userId: string; name: string }[] }> {
+  if (!ctx.group.isManager) return { roles: [], candidates: [] };
+  const [rolesRes, membersRes] = await Promise.all([
+    db()
+      .from("group_roles")
+      .select("user_id, role, users!group_roles_user_id_fkey(full_name)")
+      .eq("group_id", ctx.group.id)
+      .returns<{ user_id: string; role: RoleRow["role"]; users: { full_name: string } }[]>(),
+    db()
+      .from("group_members")
+      .select("user_id, display_name")
+      .eq("group_id", ctx.group.id)
+      .eq("status", "active")
+      .not("user_id", "is", null)
+      .returns<{ user_id: string; display_name: string }[]>(),
+  ]);
+  if (rolesRes.error) throw new Error(`roles: ${rolesRes.error.message}`);
+  if (membersRes.error) throw new Error(`role candidates: ${membersRes.error.message}`);
+
+  const rank = { owner: 0, admin: 1, collector: 2 } as const;
+  const roles = rolesRes.data
+    .map((r) => ({ userId: r.user_id, name: r.users.full_name, role: r.role, isMe: r.user_id === ctx.user.id }))
+    .sort((a, b) => rank[a.role] - rank[b.role]);
+  const withRole = new Set(roles.map((r) => r.userId));
+  return {
+    roles,
+    candidates: membersRes.data
+      .filter((m) => !withRole.has(m.user_id))
+      .map((m) => ({ userId: m.user_id, name: m.display_name })),
+  };
+}
+
 // --------------------------------------------------------------------------- link requests
 
 export interface LinkRequestRow {

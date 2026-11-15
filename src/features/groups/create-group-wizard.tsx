@@ -46,7 +46,7 @@ function StepsBar({ step }: { step: number }) {
 }
 
 /** Design "عدد الأسامي": − [10] + with 52px buttons. */
-function SlotCountField({ control }: { control: Control<CreateGroupInput, unknown, CreateGroupValues> }) {
+export function SlotCountField({ control }: { control: Control<CreateGroupInput, unknown, CreateGroupValues> }) {
   return (
     <Controller
       control={control}
@@ -96,7 +96,7 @@ function SlotCountField({ control }: { control: Control<CreateGroupInput, unknow
 }
 
 /** Design "Segmented": شهري / كل 15 يوم. */
-function FrequencyField({
+export function FrequencyField({
   control,
   onChange,
 }: {
@@ -139,7 +139,7 @@ function FrequencyField({
   );
 }
 
-function DueDayField({
+export function DueDayField({
   control,
   frequency,
 }: {
@@ -185,7 +185,7 @@ function DueDayField({
   );
 }
 
-function SummaryRow({ label, value }: { label: string; value: string }) {
+export function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-3 border-b border-line py-2.5 last:border-b-0">
       <span className="text-body-sm text-muted">{label}</span>

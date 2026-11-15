@@ -300,46 +300,38 @@ status flag can drift.
 
 ### 3.12 `payout_records`
 
-Represents a slot's payout turn within a cycle.
+One per cycle: the slot whose turn it is and the cycle's pot. Created (once,
+idempotently) by `ensure_payout` the first time an owner/admin records a
+payout for a cycle that has started, using the payout order at that time.
 
-  Column                  Type            Rules
-  ----------------------- --------------- -----------------------------------------------
-  `id`                    uuid            PK
-  `cycle_id`              uuid            FK group_cycles.id
-  `slot_id`               uuid            FK group_slots.id
-  `expected_amount`       numeric(12,2)   NOT NULL, \> 0
-  `status`                text            pending, due, partially_paid, paid, cancelled
-  `recorded_by_user_id`   uuid            nullable FK users.id
-  `paid_at`               timestamptz     nullable
-  `created_at`            timestamptz     NOT NULL
+  Column                 Type            Rules
+  ---------------------- --------------- ---------------------------------
+  `id`                   uuid            PK
+  `group_id`             uuid            FK groups.id
+  `cycle_id`             uuid            FK group_cycles.id, UNIQUE
+  `slot_id`              uuid            FK group_slots.id, UNIQUE
+  `expected_amount`      numeric(12,2)   pot = sum of the cycle's obligations
+  `created_by_user_id`   uuid            FK users.id
+  `created_at`           timestamptz     NOT NULL
 
-Each slot is paid exactly once and each cycle pays exactly one slot:
-unique `(cycle_id)` and unique `(slot_id)` (excluding cancelled
-payouts). Cycle N pays the slot at payout position N.
-`expected_amount` = the cycle's pot (sum of its member obligations).
+### 3.13 `payout_allocations` and `payout_disbursements`
 
-### 3.13 `payout_allocations`
+`payout_allocations` snapshots each owner's entitlement:
+`expected_amount = trunc(pot × share_amount / slot_amount, 2)`, leftover
+piasters to the largest share (ties: earliest created, then member id) —
+identical to `splitPot` in `src/lib/money.ts`. Example: pot 10,000, slot
+750/250 → 7,500 / 2,500.
 
-The amount each owner of a slot is entitled to receive for that payout.
+`payout_disbursements` is the append-only ledger of money handed to each
+owner (kind payment | reversal, amount > 0, paid_on, method, note,
+reversal_of_id, recorded_by_user_id, idempotency_key). Partial
+disbursements are allowed, never more than what's left. Corrections are
+reversal rows.
 
-  Column                  Type            Rules
-  ----------------------- --------------- ------------------------
-  `id`                    uuid            PK
-  `payout_id`             uuid            FK payout_records.id
-  `slot_allocation_id`    uuid            FK slot_allocations.id
-  `member_id`             uuid            FK group_members.id
-  `expected_amount`       numeric(12,2)   NOT NULL, \> 0
-  `status`                text            pending, paid
-  `paid_at`               timestamptz     nullable
-  `recorded_by_user_id`   uuid            nullable FK users.id
-  `created_at`            timestamptz     NOT NULL
-
-At payout creation, snapshot each active slot allocation into payout
-allocations, each owner getting `pot × allocation / slot_amount`.
-Example: pot EGP 10,000, slot split 750/250 creates two payout
-allocations: EGP 7,500 and EGP 2,500. Their sum must equal the payout's
-expected amount (rounding rule in section 8). This snapshot preserves history if future allocations
-change.
+`payout_allocation_balances` (view, `security_invoker`, service_role only)
+derives `paid_total`, `outstanding` and `status` (pending /
+partially_paid / paid). All payout tables are immutable (triggers) and
+owner/admin only.
 
 ### 3.14 `notifications`
 

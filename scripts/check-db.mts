@@ -37,10 +37,13 @@ const PRIVATE_TABLES = [
   "group_cycles",
   "member_obligations",
   "payment_records",
+  "payout_records",
+  "payout_allocations",
+  "payout_disbursements",
 ];
 
 // Views have no "id" column; checked separately below.
-const PRIVATE_VIEWS = ["obligation_balances"];
+const PRIVATE_VIEWS = ["obligation_balances", "payout_allocation_balances"];
 let failures = 0;
 
 function report(ok: boolean, label: string, detail = "") {

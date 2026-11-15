@@ -31,6 +31,7 @@ export default async function GroupLayout({ children, params }: LayoutProps<"/gr
         { segment: "names", label: "الأسامي" },
         { segment: "members", label: "الأعضاء" },
         { segment: "order", label: "الأدوار" },
+        { segment: "settings", label: "الإعدادات" },
       ]
     : [
         { segment: "", label: "نظرة عامة" },
