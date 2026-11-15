@@ -29,10 +29,14 @@ export default async function ProfilePage() {
         </section>
 
         {user.isSuperAdmin && (
-          <p className="flex items-center gap-2 rounded-[14px] border border-brand-100 bg-brand-50 px-4 py-3 text-body-sm font-semibold text-brand-700">
+          <Link
+            href="/admin"
+            className="flex min-h-14 items-center gap-2 rounded-[14px] border border-brand-100 bg-brand-50 px-4 py-3 text-body-sm font-semibold text-brand-700"
+          >
             <ShieldCheckIcon />
-            إنت صاحب التطبيق
-          </p>
+            <span className="flex-1">لوحة صاحب التطبيق</span>
+            <ChevronIcon />
+          </Link>
         )}
 
         <nav className="flex flex-col divide-y divide-line rounded-lg border border-line bg-surface shadow-e1">
