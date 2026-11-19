@@ -3,11 +3,12 @@
 import { Button } from "@heroui/react";
 import Link from "next/link";
 import { useState } from "react";
-import { PlusIcon, UserIcon } from "@/components/ui/icons";
+import { CloseIcon, PlusIcon, UserIcon } from "@/components/ui/icons";
 import { EmptyState } from "@/components/ui/states";
 import { formatEgyptPhone } from "@/lib/phone";
 import type { MemberRow, RegistrationState } from "@/server/services/group-detail";
 import { AddMemberSheet } from "./add-member-sheet";
+import { RemoveMemberSheet } from "./remove-member-sheet";
 
 const REG_LABEL: Record<RegistrationState, string> = {
   linked: "مسجل في التطبيق",
@@ -30,15 +31,23 @@ export function MembersView({
   isManager,
   canAdd,
   pendingRequests,
+  groupStatus,
+  slotCount,
+  slotAmount,
 }: {
   groupId: string;
   members: MemberRow[];
   isManager: boolean;
   canAdd: boolean;
   pendingRequests: number;
+  groupStatus: "draft" | "active" | "completed" | "cancelled";
+  slotCount: number;
+  slotAmount: string;
 }) {
   const [filter, setFilter] = useState<Filter>("all");
   const [adding, setAdding] = useState(false);
+  const [removing, setRemoving] = useState<MemberRow | null>(null);
+  const canRemove = isManager && (groupStatus === "draft" || groupStatus === "active");
 
   const counts = {
     all: members.length,
@@ -139,6 +148,17 @@ export function MembersView({
                     {REG_LABEL[m.registration]}
                   </span>
                 )}
+                {canRemove && m.removal && (
+                  <Button
+                    variant="ghost"
+                    isIconOnly
+                    aria-label={`شيل ${m.displayName} من الجمعية`}
+                    onPress={() => setRemoving(m)}
+                    className="-me-2 shrink-0 text-muted"
+                  >
+                    <CloseIcon />
+                  </Button>
+                )}
               </li>
             ))}
             {shown.length === 0 && <li className="px-4 py-6 text-center text-body-sm text-muted">مفيش حد هنا</li>}
@@ -158,6 +178,17 @@ export function MembersView({
       )}
 
       {canAdd && <AddMemberSheet groupId={groupId} isOpen={adding} onOpenChange={setAdding} />}
+      {removing && (
+        <RemoveMemberSheet
+          groupId={groupId}
+          member={removing}
+          others={members.filter((x) => x.id !== removing.id).map((x) => ({ id: x.id, name: x.displayName }))}
+          isDraft={groupStatus === "draft"}
+          slotCount={slotCount}
+          slotAmount={slotAmount}
+          onClose={() => setRemoving(null)}
+        />
+      )}
     </main>
   );
 }

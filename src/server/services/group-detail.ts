@@ -56,6 +56,17 @@ export interface MemberRow {
   registration: RegistrationState | null;
   slotNumbers: number[];
   isMe: boolean;
+  /** Managers only: what removing this member would mean (null for members). */
+  removal: {
+    /** Has paid something (started groups) → can't be removed. */
+    hasPaid: boolean;
+    /** One of their names already had its turn → can't be removed. */
+    turnCame: boolean;
+    /** Shares a name with someone → only "replace" is possible. */
+    sharesAName: boolean;
+    /** Names owned entirely by this member (removed in "shrink" mode). */
+    ownedNames: number;
+  } | null;
 }
 
 export async function getGroupMembers(ctx: GroupContext): Promise<MemberRow[]> {
@@ -69,14 +80,26 @@ export async function getGroupMembers(ctx: GroupContext): Promise<MemberRow[]> {
       .order("display_name"),
     db()
       .from("group_slots")
-      .select("slot_number, slot_allocations(member_id)")
+      .select("slot_number, payout_order, slot_allocations(member_id)")
       .eq("group_id", groupId)
       .neq("status", "inactive")
-      .returns<{ slot_number: number; slot_allocations: { member_id: string }[] }[]>(),
+      .returns<{ slot_number: number; payout_order: number; slot_allocations: { member_id: string }[] }[]>(),
     ctx.group.isManager
       ? db().from("member_link_requests").select("member_id").eq("group_id", groupId).eq("status", "pending")
       : Promise.resolve({ data: [] as { member_id: string }[], error: null }),
   ]);
+
+  // Admin-only: who has paid anything (blocks removal after the start).
+  const paidBy = new Set<string>();
+  if (ctx.group.isManager && ctx.group.status === "active") {
+    const { data: paid, error: paidError } = await db()
+      .from("obligation_balances")
+      .select("member_id, paid_total::text")
+      .eq("group_id", groupId)
+      .returns<{ member_id: string; paid_total: string }[]>();
+    if (paidError) throw new Error(`paid: ${paidError.message}`);
+    for (const p of paid) if (Number(p.paid_total) > 0) paidBy.add(p.member_id);
+  }
   if (membersRes.error) throw new Error(`members: ${membersRes.error.message}`);
   if (slotsRes.error) throw new Error(`member slots: ${slotsRes.error.message}`);
   if (pendingRes.error) throw new Error(`pending: ${pendingRes.error.message}`);
@@ -101,6 +124,18 @@ export async function getGroupMembers(ctx: GroupContext): Promise<MemberRow[]> {
         .map((s) => s.slot_number)
         .sort((a, b) => a - b),
       isMe: m.user_id === ctx.user.id,
+      removal: manager
+        ? (() => {
+            const mine = (slotsRes.data ?? []).filter((s) => s.slot_allocations.some((a) => a.member_id === m.id));
+            return {
+              hasPaid: paidBy.has(m.id),
+              turnCame:
+                ctx.group.status === "active" && mine.some((s) => s.payout_order <= ctx.group.currentCycle),
+              sharesAName: mine.some((s) => s.slot_allocations.some((a) => a.member_id !== m.id)),
+              ownedNames: mine.filter((s) => s.slot_allocations.every((a) => a.member_id === m.id)).length,
+            };
+          })()
+        : null,
     }),
   );
 }

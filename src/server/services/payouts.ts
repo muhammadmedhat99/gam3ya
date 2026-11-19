@@ -59,6 +59,7 @@ export async function getCyclePayout(ctx: GroupContext, cycleNumber?: number): P
     .from("group_cycles")
     .select("id, cycle_number, starts_on, due_on")
     .eq("group_id", groupId)
+    .neq("status", "cancelled")
     .order("cycle_number")
     .returns<{ id: string; cycle_number: number; starts_on: string; due_on: string }[]>();
   if (error) throw new Error(`cycles: ${error.message}`);

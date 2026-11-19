@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { db } from "@/lib/supabase/admin";
 import {
   addMemberSchema,
@@ -142,6 +143,52 @@ export async function setSlotAllocationsAction(input: SetAllocationsInput): Prom
   if (error) return dbErrorMessage(error);
 
   refresh(groupId);
+  return { ok: true };
+}
+
+const removeMemberSchema = z.object({
+  groupId: z.string().uuid(),
+  memberId: z.string().uuid(),
+  replacementId: z.string().uuid().nullable(),
+  reason: z.string().trim().max(200).optional(),
+});
+
+/**
+ * Remove a member (BUSINESS_RULES.md §10). The database decides what's allowed:
+ * draft → removed or handed to a replacement; started → only if nothing was paid
+ * and their turn hasn't come, either replaced or the group shrinks by their names.
+ */
+export async function removeMemberAction(input: z.input<typeof removeMemberSchema>): Promise<Result> {
+  const user = await requireUser();
+  const parsed = removeMemberSchema.safeParse(input);
+  if (!parsed.success) return { error: "راجع البيانات." };
+  const v = parsed.data;
+
+  const { data: member } = await db()
+    .from("group_members")
+    .select("group_id")
+    .eq("id", v.memberId)
+    .maybeSingle<{ group_id: string }>();
+  if (!member || member.group_id !== v.groupId) return { error: "العضو ده مش موجود." };
+
+  const { error } = await db().rpc("remove_group_member", {
+    p_actor_user_id: user.id,
+    p_member_id: v.memberId,
+    p_replacement_member_id: v.replacementId,
+    p_reason: v.reason ?? null,
+  });
+  if (error) {
+    const m = error.message;
+    if (m.includes("already paid")) return { error: "العضو ده دفع قبل كده، فمينفعش يتشال." };
+    if (m.includes("turn already came")) return { error: "دور العضو ده جه خلاص، فمينفعش يتشال." };
+    if (m.includes("needs a replacement")) return { error: "العضو ده شريك في اسم مع حد، فلازم حد يدخل مكانه." };
+    if (m.includes("at least 2 names")) return { error: "الجمعية لازم يفضل فيها اسمين على الأقل. اختار حد يدخل مكانه." };
+    if (m.includes("only the owner")) return { error: "صاحب الجمعية بس هو اللي يشيل أدمن." };
+    if (m.includes("replacement must be")) return { error: "اختار بديل من أعضاء الجمعية." };
+    return dbErrorMessage(error);
+  }
+
+  refresh(v.groupId);
   return { ok: true };
 }
 

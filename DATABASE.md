@@ -138,6 +138,8 @@ Association configuration.
   `collection_due_day`   integer         nullable; validate by frequency
   `timezone`             text            NOT NULL DEFAULT 'Africa/Cairo'
   `status`               text            draft, active, completed, cancelled
+  `deleted_at`           timestamptz     nullable; soft delete (owner, draft/completed only)
+  `deleted_by_user_id`   uuid            nullable FK users.id
   `created_at`           timestamptz     NOT NULL
   `updated_at`           timestamptz     NOT NULL
 
@@ -270,6 +272,16 @@ Unique `(cycle_id, member_id)`. At cycle creation, calculate the
 member's due amount from the sum of their active slot allocations. If
 the business later decides contributions are based on a different
 formula, change this rule explicitly.
+
+### 3.10b `obligation_adjustments`
+
+Append-only corrections to an obligation (`obligation_id`, `amount_delta`
+≠ 0, `reason`, `created_by_user_id`, `created_at`). The effective due is
+`amount_due + sum(amount_delta)`; `obligation_balances`, `record_payment`
+and `ensure_payout` all use it. Used when a member is removed after the
+start (their dues → 0, a replacement's dues +). Cycles cancelled by a
+shrink have `status = 'cancelled'` and are excluded from balances,
+payouts, completion and reminders.
 
 ### 3.11 `payment_records`
 

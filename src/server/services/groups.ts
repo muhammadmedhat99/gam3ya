@@ -100,6 +100,7 @@ export async function listMyGroups(userId: string, onlyGroupId?: string): Promis
         "id, name, slot_amount::text, frequency, start_date, collection_due_day, status, users!groups_owner_user_id_fkey(full_name)",
       )
       .in("id", groupIds)
+      .is("deleted_at", null) // deleted groups vanish for everyone
       .returns<GroupRow[]>(),
     db()
       .from("group_slots")

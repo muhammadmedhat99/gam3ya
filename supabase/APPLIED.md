@@ -15,3 +15,5 @@ after it succeeds, then run `node --env-file=.env.local scripts/check-db.mts`.
 | `20261115200746_notifications.sql` | 2026-11-15 | Verified by `check-db.mts`; anon denied. Cron job `gam3ya-daily-notifications` confirmed in Dashboard |
 | `20261115201001_super_admin.sql` | 2026-11-15 | Verified: non-admin actor and anon refused; admin embeds ok |
 | `20261115210127_slot_numbers_follow_order.sql` | 2026-11-15 | Verified: renumber_slots exists; all active slots have slot_number = payout_order |
+| `20261119164245_delete_group.sql` | 2026-11-19 | Verified: deleted_at column + filters, delete_group responds, anon denied |
+| `20261119171003_remove_member.sql` | 2026-11-19 | Verified: obligation_adjustments + view filter, remove_group_member responds, anon denied |

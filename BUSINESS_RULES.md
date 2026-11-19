@@ -134,6 +134,17 @@ entire pot to either person. See section 8.
 -   After completion, late payments and remaining payouts can still be
     recorded (and corrected) so arrears can be settled.
 
+### Deleting an association
+
+-   Only the owner can delete an association, and only while it is a
+    draft or after it has completed. An active association can't be
+    deleted.
+-   Deleting hides it from the app for everyone and freezes it (no
+    further changes or records). Members are notified.
+-   Financial records are never deleted: obligations, payments, payouts
+    and the activity log stay in the database (soft delete,
+    `groups.deleted_at`).
+
 ### Roles inside an association
 
 -   Only the owner adds or removes admins; owners and admins add or
@@ -335,6 +346,24 @@ does not confirm, the member is created unlinked.
 -   A user can be an admin in one association and a member in another.
 -   Do not assume a global role determines their role in every
     association.
+
+### Removing a member
+
+-   **Draft:** the member leaves; their names become short ("ناقص") to be
+    split again, or a replacement member takes their shares.
+-   **Started:** allowed only if the member has paid nothing and none of
+    their names has had its turn. Two ways:
+    -   **Replace:** a replacement member takes all their shares and every
+        due (pays and receives in their place). Required if they share a
+        name with someone.
+    -   **Shrink:** their names are removed, the later turns move up one
+        place each (the 7th takes the 6th's turn…), the association has
+        fewer names, each cycle's pot is recalculated and the last cycles
+        are cancelled. Not allowed below 2 names.
+-   Nothing is deleted: dues are corrected with auditable adjustments
+    (`obligation_adjustments`), the member row stays with status
+    `removed`, and they lose access and any admin/collector role. Only the
+    owner can remove an admin.
 
 ### Password reset
 

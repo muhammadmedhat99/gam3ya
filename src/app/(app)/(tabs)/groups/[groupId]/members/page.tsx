@@ -21,6 +21,9 @@ export default async function MembersPage({ params }: PageProps<"/groups/[groupI
       isManager={ctx.group.isManager}
       canAdd={ctx.group.isManager && open}
       pendingRequests={pending}
+      groupStatus={ctx.group.status}
+      slotCount={ctx.group.slotCount}
+      slotAmount={ctx.group.slotAmount}
     />
   );
 }

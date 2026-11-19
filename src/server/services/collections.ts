@@ -90,6 +90,7 @@ export async function getCycleCollection(ctx: GroupContext, cycleNumber?: number
     .from("group_cycles")
     .select("cycle_number, starts_on, due_on")
     .eq("group_id", groupId)
+    .neq("status", "cancelled")
     .order("cycle_number")
     .returns<{ cycle_number: number; starts_on: string; due_on: string }[]>();
   if (cyclesError) throw new Error(`cycles: ${cyclesError.message}`);
@@ -105,6 +106,7 @@ export async function getCycleCollection(ctx: GroupContext, cycleNumber?: number
       .select(BALANCE_COLUMNS)
       .eq("group_id", groupId)
       .eq("cycle_number", cycle.number)
+      .neq("status", "cancelled")
       .returns<BalanceRow[]>(),
     db().from("group_members").select("id, display_name").eq("group_id", groupId),
     slotBreakdown(groupId),
@@ -195,6 +197,7 @@ export async function getMemberPayments(ctx: GroupContext, memberId: string): Pr
       .select(BALANCE_COLUMNS)
       .eq("group_id", groupId)
       .eq("member_id", memberId)
+      .neq("status", "cancelled")
       .order("cycle_number", { ascending: false })
       .returns<BalanceRow[]>(),
     slotBreakdown(groupId),
@@ -273,6 +276,7 @@ export async function currentCycleTotals(
     .select("amount_due::text, paid_total::text, status, due_on")
     .eq("group_id", groupId)
     .eq("cycle_number", cycleNumber)
+    .neq("status", "cancelled")
     .returns<{ amount_due: string; paid_total: string; status: PaymentStatus; due_on: string }[]>();
   if (error) throw new Error(`cycle totals: ${error.message}`);
   if (data.length === 0) return null;
