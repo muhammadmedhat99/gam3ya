@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/lib/supabase/admin";
 import { createGroupSchema, type CreateGroupInput } from "@/lib/validation/groups";
@@ -93,6 +94,41 @@ export async function removeGroupRoleAction(input: z.input<typeof removeSchema>)
   if (error) return message(error);
   refresh(parsed.data.groupId);
   return { ok: true };
+}
+
+const deleteSchema = z.object({ groupId: uuid, confirmName: z.string() });
+
+/**
+ * Soft delete (owner only; draft or completed). The typed name must match the
+ * group's name. Financial records stay in the database (AGENTS.md rule 11).
+ */
+export async function deleteGroupAction(input: z.input<typeof deleteSchema>): Promise<ActionError> {
+  const user = await requireUser();
+  const parsed = deleteSchema.safeParse(input);
+  if (!parsed.success) return { error: "حصلت مشكلة. جرب تاني." };
+
+  const { data: group } = await db()
+    .from("groups")
+    .select("name")
+    .eq("id", parsed.data.groupId)
+    .is("deleted_at", null)
+    .maybeSingle<{ name: string }>();
+  if (!group) return { error: "الجمعية دي مش موجودة." };
+  if (parsed.data.confirmName.trim() !== group.name.trim()) {
+    return { fieldErrors: { confirmName: "الاسم مش مطابق لاسم الجمعية" } };
+  }
+
+  const { error } = await db().rpc("delete_group", { p_actor_user_id: user.id, p_group_id: parsed.data.groupId });
+  if (error) {
+    if (error.code === "42501") return { error: "صاحب الجمعية بس هو اللي يقدر يمسحها." };
+    if (error.message.includes("draft or completed")) {
+      return { error: "الجمعية الشغالة مينفعش تتمسح. تتمسح وهي مسودة أو بعد ما تخلص." };
+    }
+    return { error: "حصلت مشكلة. جرب تاني." };
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/groups");
 }
 
 export async function completeGroupAction(input: { groupId: string }): Promise<Result> {

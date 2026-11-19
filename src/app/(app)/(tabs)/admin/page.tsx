@@ -22,6 +22,7 @@ const ACTION: Record<string, string> = {
   "group.created": "عمل جمعية",
   "group.activated": "بدأ جمعية",
   "group.completed": "جمعية خلصت",
+  "group.deleted": "مسح جمعية",
   "group.settings_changed": "عدّل إعدادات",
   "group.payout_order_changed": "غيّر ترتيب القبض",
   "member.added": "ضاف عضو",

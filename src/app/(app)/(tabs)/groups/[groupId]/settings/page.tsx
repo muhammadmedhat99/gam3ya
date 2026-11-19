@@ -4,6 +4,7 @@ import { Notice } from "@/components/ui/notice";
 import { todayInCairo } from "@/lib/dates";
 import { buildSchedule } from "@/lib/schedule";
 import { CompleteGroup } from "@/features/settings/complete-group";
+import { DeleteGroup } from "@/features/settings/delete-group";
 import { RolesSection } from "@/features/settings/roles-section";
 import { SettingsForm } from "@/features/settings/settings-form";
 import { getGroupRoles, requireGroupManager } from "@/server/services/group-detail";
@@ -57,6 +58,10 @@ export default async function SettingsPage({ params }: PageProps<"/groups/[group
       <RolesSection groupId={groupId} roles={roles} candidates={candidates} isOwner={group.role === "owner"} />
 
       {group.status === "active" && <CompleteGroup groupId={groupId} canComplete={lastStarted} />}
+
+      {group.role === "owner" && (group.status === "draft" || group.status === "completed") && (
+        <DeleteGroup groupId={groupId} groupName={group.name} status={group.status} />
+      )}
     </main>
   );
 }

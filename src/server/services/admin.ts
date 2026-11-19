@@ -15,6 +15,7 @@ export async function platformStats(): Promise<PlatformStats> {
   const count = async (table: string, filter?: [string, string]) => {
     let q = db().from(table).select("id", { count: "exact", head: true });
     if (filter) q = q.eq(filter[0], filter[1]);
+    if (table === "groups") q = q.is("deleted_at", null);
     const { count: n, error } = await q;
     if (error) throw new Error(`stats ${table}: ${error.message}`);
     return n ?? 0;
@@ -69,9 +70,9 @@ export async function findUserByPhone(phone: string): Promise<AdminUserView | nu
   if (!u) return null;
 
   const [rolesRes, membersRes, pendingRes] = await Promise.all([
-    db().from("group_roles").select("role, groups!inner(id, name)").eq("user_id", u.id)
+    db().from("group_roles").select("role, groups!inner(id, name)").eq("user_id", u.id).is("groups.deleted_at", null)
       .returns<{ role: string; groups: { id: string; name: string } }[]>(),
-    db().from("group_members").select("groups!inner(id, name)").eq("user_id", u.id).eq("status", "active")
+    db().from("group_members").select("groups!inner(id, name)").eq("user_id", u.id).eq("status", "active").is("groups.deleted_at", null)
       .returns<{ groups: { id: string; name: string } }[]>(),
     db().from("member_link_requests").select("id", { count: "exact", head: true }).eq("user_id", u.id).eq("status", "pending"),
   ]);
