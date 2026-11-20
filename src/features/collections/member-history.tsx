@@ -13,8 +13,8 @@ const METHOD = { cash: "كاش", transfer: "تحويل" } as const;
 function Entry({ entry, canReverse, onReverse }: { entry: LedgerEntry; canReverse: boolean; onReverse: () => void }) {
   if (entry.kind === "reversal") {
     return (
-      <li className="flex items-start gap-3 rounded-[12px] border border-overdue-line bg-overdue-soft px-3 py-2.5">
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+      <li className="flex flex-wrap items-start gap-x-3 gap-y-1 rounded-[12px] border border-overdue-line bg-overdue-soft px-3 py-2.5">
+        <div className="flex min-w-[min(9rem,100%)] flex-1 flex-col gap-0.5">
           <span className="text-body-sm font-semibold text-overdue">قيد عكسي</span>
           <span className="text-caption text-body">
             {formatDate(entry.paidOn)} · {entry.note}
@@ -29,8 +29,8 @@ function Entry({ entry, canReverse, onReverse }: { entry: LedgerEntry; canRevers
     );
   }
   return (
-    <li className="flex items-center gap-3 rounded-[12px] border border-line bg-surface px-3 py-2.5">
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+    <li className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-[12px] border border-line bg-surface px-3 py-2.5">
+      <div className="flex min-w-[min(9rem,100%)] flex-1 flex-col gap-0.5">
         <span className="flex items-center gap-1.5 text-body-sm font-semibold text-ink">
           دفعة
           {entry.reversed && (

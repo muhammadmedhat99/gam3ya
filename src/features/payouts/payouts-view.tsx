@@ -20,7 +20,7 @@ const METHOD = { cash: "كاش", transfer: "تحويل" } as const;
 export function PayoutStatusChip({ status }: { status: PayoutStatus }) {
   const s = STATUS[status];
   return (
-    <span className={`inline-flex h-7 shrink-0 items-center gap-1 rounded-full border px-2.5 text-caption font-semibold ${s.cls}`}>
+    <span className={`inline-flex min-h-7 py-0.5 shrink-0 items-center gap-1 rounded-full border px-2.5 text-caption font-semibold ${s.cls}`}>
       {s.icon}
       {s.label}
     </span>
@@ -47,17 +47,19 @@ export function PayoutsView({ groupId, data }: { groupId: string; data: CyclePay
     <>
       {data.owners.map((owner) => (
         <section key={owner.memberId} className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center gap-3">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-title-3 text-brand-700">
-              {owner.name.charAt(0)}
-            </span>
-            <div className="flex min-w-0 flex-1 flex-col">
-              <span className="truncate text-body-sm font-semibold text-ink">{owner.name}</span>
-              <span className="tabular text-caption text-muted">حصته في الاسم {formatEGP(owner.share)}</span>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex min-w-[min(13rem,100%)] flex-1 items-center gap-3">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-title-3 text-brand-700">
+                {owner.name.charAt(0)}
+              </span>
+              <div className="flex min-w-0 flex-1 flex-col">
+                <span className="text-body-sm font-semibold text-ink">{owner.name}</span>
+                <span className="tabular text-caption text-muted">حصته في الاسم {formatEGP(owner.share)}</span>
+              </div>
             </div>
             <PayoutStatusChip status={owner.status} />
           </div>
-          <div className="grid grid-cols-3 gap-2 rounded-[12px] bg-surface-2 px-3 py-2.5">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(5.5rem,100%),1fr))] gap-2 rounded-[12px] bg-surface-2 px-3 py-2.5">
             {[
               ["نصيبه", owner.expected],
               ["استلم", owner.received],
@@ -74,8 +76,8 @@ export function PayoutsView({ groupId, data }: { groupId: string; data: CyclePay
             <ul className="flex flex-col gap-2">
               {owner.entries.map((e) =>
                 e.kind === "reversal" ? (
-                  <li key={e.id} className="flex items-start gap-3 rounded-[12px] border border-overdue-line bg-overdue-soft px-3 py-2">
-                    <div className="flex min-w-0 flex-1 flex-col">
+                  <li key={e.id} className="flex flex-wrap items-start gap-x-3 gap-y-1 rounded-[12px] border border-overdue-line bg-overdue-soft px-3 py-2">
+                    <div className="flex min-w-[min(9rem,100%)] flex-1 flex-col">
                       <span className="text-body-sm font-semibold text-overdue">قيد عكسي</span>
                       <span className="text-caption text-body">
                         {formatDate(e.paidOn)} · {e.note} · سجّله {e.recordedBy}
@@ -84,8 +86,8 @@ export function PayoutsView({ groupId, data }: { groupId: string; data: CyclePay
                     <span className="tabular text-amount-sm text-overdue">−{formatEGP(e.amount)}</span>
                   </li>
                 ) : (
-                  <li key={e.id} className="flex items-center gap-3 rounded-[12px] border border-line px-3 py-2">
-                    <div className="flex min-w-0 flex-1 flex-col">
+                  <li key={e.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-[12px] border border-line px-3 py-2">
+                    <div className="flex min-w-[min(9rem,100%)] flex-1 flex-col">
                       <span className="flex items-center gap-1.5 text-body-sm font-semibold text-ink">
                         استلم
                         {e.reversed && (

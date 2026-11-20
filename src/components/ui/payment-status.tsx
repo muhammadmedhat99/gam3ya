@@ -22,7 +22,7 @@ const ICON: Record<PaymentStatus, React.ReactNode> = {
 export function PaymentStatusChip({ status, count }: { status: PaymentStatus; count?: number }) {
   const s = PAYMENT_STATUS[status];
   return (
-    <span className={`inline-flex h-7 shrink-0 items-center gap-1 rounded-full border px-2.5 text-caption font-semibold ${s.chip}`}>
+    <span className={`inline-flex min-h-7 py-0.5 shrink-0 items-center gap-1 rounded-full border px-2.5 text-caption font-semibold ${s.chip}`}>
       {ICON[status]}
       {s.label}
       {count !== undefined && <b className="tabular">{count}</b>}

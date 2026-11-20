@@ -62,7 +62,7 @@ export default async function HomePage() {
                   </div>
                   <span
                     aria-label={requestsLabel(task.pendingLinkRequests)}
-                    className="flex h-7 min-w-7 items-center justify-center rounded-full bg-brand-600 px-2 text-caption font-bold text-white"
+                    className="flex min-h-7 py-0.5 min-w-7 items-center justify-center rounded-full bg-brand-600 px-2 text-caption font-bold text-white"
                   >
                     {task.pendingLinkRequests}
                   </span>
@@ -84,7 +84,7 @@ export default async function HomePage() {
                       {task.dueOn && ` · آخر ميعاد كان ${formatDayMonth(task.dueOn)}`}
                     </span>
                   </div>
-                  <span className="flex h-7 min-w-7 items-center justify-center rounded-full bg-overdue px-2 text-caption font-bold text-white">
+                  <span className="flex min-h-7 py-0.5 min-w-7 items-center justify-center rounded-full bg-overdue px-2 text-caption font-bold text-white">
                     {task.overdue}
                   </span>
                   <ChevronIcon className="text-muted" />

@@ -28,7 +28,7 @@ function UnreadBadge({ count }: { count: Promise<number> }) {
   const unread = use(count);
   if (unread <= 0) return null;
   return (
-    <span className="absolute -top-1 inset-e-2.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full border-2 border-surface bg-brand-600 px-1 text-[11px] font-bold text-white">
+    <span className="absolute -top-1 inset-e-2.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full border-2 border-surface bg-brand-600 px-1 text-[0.6875rem] font-bold text-white">
       {unread > 99 ? "99+" : unread}
       <span className="sr-only"> إشعارات جديدة</span>
     </span>
@@ -50,13 +50,13 @@ export function BottomNav({ unread }: { unread: Promise<number> }) {
             key={tab.href}
             href={tab.href}
             aria-current={active ? "page" : undefined}
-            className={`relative flex min-h-14 flex-col items-center gap-0.75 pt-1.5 pb-1 ${
+            className={`relative flex min-h-14 min-w-0 flex-col items-center gap-0.75 pt-1.5 pb-1 ${
               active ? "text-brand-700" : "text-muted"
             }`}
           >
             <LinkPendingBar className="inset-x-6 top-0 h-0.75" />
             <span
-              className={`relative flex h-8 w-15 items-center justify-center rounded-full ${
+              className={`relative flex h-8 w-full max-w-15 shrink-0 items-center justify-center rounded-full ${
                 active ? "bg-brand-100" : ""
               }`}
             >
@@ -67,7 +67,7 @@ export function BottomNav({ unread }: { unread: Promise<number> }) {
                 </Suspense>
               )}
             </span>
-            <span className={`text-micro ${active ? "font-bold" : ""}`}>{tab.label}</span>
+            <span className={`w-full truncate text-center text-micro ${active ? "font-bold" : ""}`}>{tab.label}</span>
           </Link>
         );
       })}

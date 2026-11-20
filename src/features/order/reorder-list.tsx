@@ -73,7 +73,7 @@ function SortableRow({ slot, index, total, locked, isCurrent, moved, dueOn, lock
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`relative flex min-h-[62px] items-center gap-2 rounded-[14px] border p-2 ${
+      className={`relative flex min-h-[62px] flex-wrap items-center gap-2 rounded-[14px] border p-2 ${
         isDragging
           ? "z-10 border-brand-600 bg-surface shadow-e2"
           : locked
@@ -84,7 +84,7 @@ function SortableRow({ slot, index, total, locked, isCurrent, moved, dueOn, lock
       }`}
     >
       {locked ? (
-        <span aria-label="متقفل" className="flex h-11 w-9 shrink-0 items-center justify-center text-muted">
+        <span aria-label="متقفل" className="flex min-h-11 py-1.5 w-9 shrink-0 items-center justify-center text-muted">
           <LockIcon />
         </span>
       ) : (
@@ -94,7 +94,7 @@ function SortableRow({ slot, index, total, locked, isCurrent, moved, dueOn, lock
           {...attributes}
           {...listeners}
           aria-label={`اسحب عشان تنقل ${ownersSummary(slot)}`}
-          className="flex h-11 w-9 shrink-0 cursor-grab touch-none items-center justify-center rounded-[10px] text-muted active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:outline-none"
+          className="flex min-h-11 py-1.5 w-9 shrink-0 cursor-grab touch-none items-center justify-center rounded-[10px] text-muted active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:outline-none"
         >
           <GripIcon />
         </button>
@@ -112,28 +112,28 @@ function SortableRow({ slot, index, total, locked, isCurrent, moved, dueOn, lock
       >
         {index + 1}
       </span>
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+      <div className="flex min-w-[min(8rem,100%)] flex-1 flex-col gap-0.5">
         <div className="flex flex-wrap items-center gap-1.5">
           <span className={`text-body-sm font-semibold ${locked && !isCurrent ? "text-muted" : "text-ink"}`}>
             {ownersSummary(slot)}
           </span>
           {isCurrent && (
-            <span className="rounded-full bg-brand-600 px-2 text-[12.5px] leading-[22px] font-semibold text-white">
+            <span className="rounded-full bg-brand-600 px-2 text-[0.78125rem] leading-[22px] font-semibold text-white">
               الدورة دي
             </span>
           )}
           {moved && !isDragging && (
-            <span className="rounded-full border border-brand-100 bg-brand-50 px-2 text-[12.5px] leading-[22px] font-semibold text-brand-700">
+            <span className="rounded-full border border-brand-100 bg-brand-50 px-2 text-[0.78125rem] leading-[22px] font-semibold text-brand-700">
               اتنقل
             </span>
           )}
         </div>
-        <span className="truncate text-caption text-muted">
+        <span className="text-caption text-muted">
           اسم {index + 1} · يقبض {formatDayMonth(dueOn)}
         </span>
       </div>
       {!locked && (
-        <div className="flex shrink-0">
+        <div className="ms-auto flex shrink-0">
           <Button
             variant="ghost"
             isIconOnly

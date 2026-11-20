@@ -31,7 +31,7 @@ export default async function GroupsPage() {
       </main>
       <Link
         href="/groups/new"
-        className="button button--primary fixed bottom-[calc(var(--nav-height)+16px)] z-20 h-14 rounded-[18px] px-5 text-base shadow-e2 end-[max(1rem,calc(50%-14rem+1rem))]"
+        className="button button--primary fixed bottom-[calc(var(--nav-height)+16px)] z-20 min-h-14 rounded-[18px] px-5 text-base shadow-e2 end-[max(1rem,calc(50%-14rem+1rem))]"
       >
         <PlusIcon />
         اعمل جمعية

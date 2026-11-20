@@ -80,7 +80,7 @@ export function FormTextField<T extends FieldValues>({
                 className={ltr ? "text-right" : undefined}
               />
               {suffix && (
-                <InputGroup.Suffix className="text-[15px] font-medium whitespace-nowrap text-muted">
+                <InputGroup.Suffix className="text-[0.9375rem] font-medium whitespace-nowrap text-muted">
                   {suffix}
                 </InputGroup.Suffix>
               )}

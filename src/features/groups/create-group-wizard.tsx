@@ -75,7 +75,7 @@ export function SlotCountField({ control }: { control: Control<CreateGroupInput,
                 ref={field.ref}
                 dir="ltr"
                 inputMode="numeric"
-                className="h-13 min-w-0 flex-1 rounded-[12px] border-[1.5px] border-line-strong bg-surface text-center text-[20px] font-bold text-ink"
+                className="min-h-13 py-2 min-w-0 flex-1 rounded-[12px] border-[1.5px] border-line-strong bg-surface text-center text-[1.25rem] font-bold text-ink"
               />
               <Button variant="outline" isIconOnly aria-label="زوّد" onPress={() => set(value + 1)} className="size-[52px]">
                 <PlusIcon />
@@ -114,7 +114,7 @@ export function FrequencyField({
             {(["monthly", "semi_monthly"] as const).map((f) => (
               <label
                 key={f}
-                className={`flex h-11 flex-1 cursor-pointer items-center justify-center rounded-[10px] text-[15px] has-focus-visible:ring-2 has-focus-visible:ring-brand-600 ${
+                className={`flex min-h-11 py-1.5 flex-1 cursor-pointer items-center justify-center rounded-[10px] text-[0.9375rem] has-focus-visible:ring-2 has-focus-visible:ring-brand-600 ${
                   field.value === f ? "bg-surface font-bold text-ink shadow-e1" : "font-medium text-muted"
                 }`}
               >
@@ -170,7 +170,7 @@ export function DueDayField({
               inputMode="numeric"
               className="input-group__input min-w-0 flex-1 border-0 bg-transparent text-right outline-none"
             />
-            <span className="text-[15px] font-medium whitespace-nowrap text-muted">
+            <span className="text-[0.9375rem] font-medium whitespace-nowrap text-muted">
               {frequency === "monthly" ? "من كل شهر" : "يوم بعد بداية الدورة"}
             </span>
           </div>
@@ -187,7 +187,7 @@ export function DueDayField({
 
 export function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-line py-2.5 last:border-b-0">
+    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line py-2.5 last:border-b-0">
       <span className="text-body-sm text-muted">{label}</span>
       <span className="tabular text-body-sm font-semibold text-ink">{value}</span>
     </div>

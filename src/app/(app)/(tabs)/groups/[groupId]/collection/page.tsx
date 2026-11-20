@@ -28,7 +28,7 @@ export default async function CollectionPage({ params, searchParams }: PageProps
 
   return (
     <main className="flex flex-col gap-3 px-4 pt-4 pb-6">
-      <nav aria-label="اختار الدورة" className="flex items-center justify-between gap-2">
+      <nav aria-label="اختار الدورة" className="flex flex-wrap items-center justify-between gap-2">
         {prev ? (
           <Link href={`${base}?cycle=${prev.number}`} className="button button--ghost" aria-label={`الدورة ${prev.number}`}>
             <BackIcon />
@@ -54,15 +54,15 @@ export default async function CollectionPage({ params, searchParams }: PageProps
       <section className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-4 shadow-e1">
         <div className="flex items-center gap-2">
           <h2 className="flex-1 text-title-3 text-ink">الدورة {c.number}</h2>
-          <span className="inline-flex h-[26px] items-center gap-1 rounded-full border border-line bg-surface-2 px-[9px] text-[12.5px] font-semibold text-body">
+          <span className="inline-flex min-h-[26px] py-0.5 items-center gap-1 rounded-full border border-line bg-surface-2 px-[9px] text-[0.78125rem] font-semibold text-body">
             <CalendarIcon size={14} />
             آخر ميعاد {formatDate(c.dueOn)}
           </span>
         </div>
         <div className="flex flex-col gap-2">
-          <p className="flex items-baseline gap-1.5">
-            <span className="tabular text-[28px] leading-9 font-bold text-ink">{formatAmount(data.collected)}</span>
-            <span className="text-[17px] font-medium text-muted">ج.م</span>
+          <p className="flex flex-wrap items-baseline gap-1.5">
+            <span className="tabular text-[1.75rem] leading-9 font-bold text-ink">{formatAmount(data.collected)}</span>
+            <span className="text-[1.0625rem] font-medium text-muted">ج.م</span>
             <span className="text-body-sm text-muted">من</span>
             <span className="tabular text-title-3 text-muted">{formatEGP(data.expected)}</span>
           </p>

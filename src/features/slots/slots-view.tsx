@@ -30,9 +30,9 @@ function SlotCard({
   const diff = formatEGP(slot.remaining.replace("-", ""));
   return (
     <section className="flex flex-col gap-2.5 rounded-lg border border-line bg-surface p-3.5 shadow-e1">
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <h3 className="text-title-3 text-ink">اسم {slot.slotNumber}</h3>
-        <span className={`inline-flex h-[26px] items-center gap-1 rounded-full border px-[9px] text-[12.5px] font-semibold ${chip.cls}`}>
+        <span className={`inline-flex min-h-[26px] py-0.5 items-center gap-1 rounded-full border px-[9px] text-[0.78125rem] font-semibold ${chip.cls}`}>
           {chip.icon}
           {chip.label}
         </span>
@@ -45,10 +45,10 @@ function SlotCard({
       </div>
       <SplitBar slotAmount={slotAmount} owners={slot.owners} />
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
-        <div className="flex flex-wrap gap-x-4 gap-y-1">
+        <div className="flex min-w-0 flex-wrap gap-x-4 gap-y-1">
           {slot.owners.length === 0 && <span className="text-caption text-muted">لسه ملوش أصحاب</span>}
           {slot.owners.map((o, i) => (
-            <span key={o.memberId} className="flex items-center gap-1.5 text-caption">
+            <span key={o.memberId} className="flex min-w-0 flex-wrap items-center gap-1.5 text-caption">
               <span className={`size-2.5 rounded-[3px] ${ownerColor(i)}`} />
               <span className="font-medium text-body">{o.name}</span>
               <span className="tabular font-semibold text-ink">{formatAmount(o.amount)}</span>
@@ -102,7 +102,7 @@ export function SlotsView({
         <>
           <h2 className="flex items-center gap-2 text-label text-ink">
             محتاج تظبيط
-            <span className="rounded-full border border-warning-line bg-warning-soft px-2 text-[12.5px] font-semibold text-warning">
+            <span className="rounded-full border border-warning-line bg-warning-soft px-2 text-[0.78125rem] font-semibold text-warning">
               {needsWork.length}
             </span>
           </h2>
@@ -116,7 +116,7 @@ export function SlotsView({
         <>
           <h2 className="flex items-center gap-2 text-label text-ink">
             كاملين
-            <span className="rounded-full border border-brand-100 bg-brand-50 px-2 text-[12.5px] font-semibold text-brand-700">
+            <span className="rounded-full border border-brand-100 bg-brand-50 px-2 text-[0.78125rem] font-semibold text-brand-700">
               {complete.length}
             </span>
           </h2>

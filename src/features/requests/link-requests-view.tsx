@@ -72,19 +72,21 @@ export function LinkRequestsView({
 
       {requests.map((r) => (
         <section key={r.id} className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center gap-3">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-title-3 text-brand-700">
-              {r.registeredName.charAt(0)}
-            </span>
-            <div className="flex min-w-0 flex-1 flex-col">
-              <span className="truncate text-body-sm font-semibold text-ink">{r.registeredName}</span>
-              <span dir="ltr" className="tabular text-right text-caption text-muted">
-                {formatEgyptPhone(r.phone)}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex min-w-[min(13rem,100%)] flex-1 items-center gap-3">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-title-3 text-brand-700">
+                {r.registeredName.charAt(0)}
               </span>
+              <div className="flex min-w-0 flex-1 flex-col">
+                <span className="text-body-sm font-semibold text-ink">{r.registeredName}</span>
+                <span dir="ltr" className="tabular text-right text-caption text-muted">
+                  {formatEgyptPhone(r.phone)}
+                </span>
+              </div>
             </div>
             <span className="shrink-0 text-caption text-muted">{r.ago}</span>
           </div>
-          <dl className="grid grid-cols-2 gap-2 rounded-[12px] bg-surface-2 p-3 text-body-sm">
+          <dl className="grid grid-cols-[repeat(auto-fit,minmax(min(8rem,100%),1fr))] gap-2 rounded-[12px] bg-surface-2 p-3 text-body-sm">
             <div>
               <dt className="text-caption text-muted">إنت كتبته</dt>
               <dd className="font-semibold text-ink">{r.memberName}</dd>

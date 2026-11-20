@@ -151,7 +151,7 @@ export function RemoveMemberSheet({
           <input
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            className="h-13 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-base text-ink"
+            className="min-h-13 py-2 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-base text-ink"
           />
         </label>
       )}
@@ -215,7 +215,7 @@ function ReplacementSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-13 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-base text-ink"
+        className="min-h-13 py-2 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-base text-ink"
       >
         <option value="">{optional ? "محدش، سيب أساميه ناقصة" : "اختار عضو…"}</option>
         {others.map((o) => (

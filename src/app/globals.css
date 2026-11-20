@@ -63,41 +63,41 @@
   --color-owner-3: #c9a66b;
 
   /* Type scale (size / line-height · weight) */
-  --text-display: 28px;
-  --text-display--line-height: 40px;
+  --text-display: 1.75rem;
+  --text-display--line-height: 2.5rem;
   --text-display--font-weight: 700;
-  --text-title-1: 22px;
-  --text-title-1--line-height: 34px;
+  --text-title-1: 1.375rem;
+  --text-title-1--line-height: 2.125rem;
   --text-title-1--font-weight: 700;
-  --text-title-2: 18px;
-  --text-title-2--line-height: 28px;
+  --text-title-2: 1.125rem;
+  --text-title-2--line-height: 1.75rem;
   --text-title-2--font-weight: 600;
-  --text-title-3: 16px;
-  --text-title-3--line-height: 26px;
+  --text-title-3: 1rem;
+  --text-title-3--line-height: 1.625rem;
   --text-title-3--font-weight: 600;
-  --text-body: 16px;
-  --text-body--line-height: 26px;
-  --text-body-sm: 14px;
-  --text-body-sm--line-height: 22px;
-  --text-label: 14px;
-  --text-label--line-height: 20px;
+  --text-body: 1rem;
+  --text-body--line-height: 1.625rem;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.375rem;
+  --text-label: 0.875rem;
+  --text-label--line-height: 1.25rem;
   --text-label--font-weight: 600;
-  --text-caption: 13px;
-  --text-caption--line-height: 20px;
-  --text-micro: 12px;
-  --text-micro--line-height: 16px;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.25rem;
+  --text-micro: 0.75rem;
+  --text-micro--line-height: 1rem;
   --text-micro--font-weight: 500;
-  --text-amount-xl: 34px;
-  --text-amount-xl--line-height: 44px;
+  --text-amount-xl: 2.125rem;
+  --text-amount-xl--line-height: 2.75rem;
   --text-amount-xl--font-weight: 700;
-  --text-amount-lg: 26px;
-  --text-amount-lg--line-height: 34px;
+  --text-amount-lg: 1.625rem;
+  --text-amount-lg--line-height: 2.125rem;
   --text-amount-lg--font-weight: 700;
-  --text-amount-md: 18px;
-  --text-amount-md--line-height: 26px;
+  --text-amount-md: 1.125rem;
+  --text-amount-md--line-height: 1.625rem;
   --text-amount-md--font-weight: 600;
-  --text-amount-sm: 15px;
-  --text-amount-sm--line-height: 22px;
+  --text-amount-sm: 0.9375rem;
+  --text-amount-sm--line-height: 1.375rem;
   --text-amount-sm--font-weight: 600;
 
   /* Radius */
@@ -152,15 +152,21 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Large system fonts / page zoom (common on older phones and for weak eyesight):
+   everything is sized in rem and wraps, so content grows downward instead of
+   sideways. Long unbroken strings (names, notes) break instead of overflowing,
+   and the page itself never scrolls horizontally. */
 body {
   background: var(--color-paper);
   color: var(--color-body);
+  overflow-wrap: break-word;
+  overflow-x: clip;
 }
 
 /* Height of the fixed bottom navigation, including the iPhone home-indicator area.
    Anything fixed above the nav (FABs, sticky save bars) is offset by this. */
 :root {
-  --nav-height: calc(60px + max(14px, env(safe-area-inset-bottom)));
+  --nav-height: calc(3.75rem + max(14px, env(safe-area-inset-bottom)));
 }
 
 @keyframes link-pending {
@@ -179,22 +185,30 @@ body {
 
 /* ------------------------------------------------- HeroUI component overrides */
 
-/* Buttons: min 44px, md 44 / lg 52 full-width CTA */
+/* Buttons: min 44px, md 44 / lg 52 full-width CTA. They grow taller (and wrap
+   their label) when the text is scaled up instead of overflowing. */
 .button {
-  height: 44px;
+  height: auto;
+  min-height: 2.75rem;
+  padding-block: 0.375rem;
   padding-inline: 16px;
+  white-space: normal;
+  line-height: 1.3;
+  text-align: center;
   border-radius: var(--radius-md);
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 600;
 }
 .button--lg {
-  height: 52px;
+  min-height: 3.25rem;
   padding-inline: 20px;
   border-radius: 14px;
-  font-size: 16px;
+  font-size: 1rem;
 }
 .button--icon-only {
-  width: 44px;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
   padding: 0;
 }
 .button--primary {
@@ -248,14 +262,15 @@ body {
 
 /* Fields: 52px, 16px text (no iOS zoom), 1.5px border */
 .label {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   font-weight: 600;
   color: var(--color-ink);
 }
 .input-group {
-  height: 52px;
-  min-height: 52px;
+  height: auto;
+  min-height: 3.25rem;
+  min-width: 0;
   gap: 10px;
   padding-inline: 14px;
   border: 1.5px solid var(--color-line-strong);
@@ -281,9 +296,11 @@ body {
   background: var(--color-disabled);
 }
 .input-group__input {
-  height: 100%;
+  height: auto;
+  min-width: 0;
+  align-self: stretch;
   padding: 0;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--color-ink);
   font-variant-numeric: tabular-nums;
@@ -305,8 +322,8 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
-  line-height: 20px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
   font-weight: 500;
   color: var(--color-danger);
 }
@@ -331,13 +348,13 @@ body {
   border-color: var(--color-warning-line);
 }
 .alert__title {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   font-weight: 600;
 }
 .alert__description {
-  font-size: 14px;
-  line-height: 22px;
+  font-size: 0.875rem;
+  line-height: 1.375rem;
   color: var(--color-body);
 }
 

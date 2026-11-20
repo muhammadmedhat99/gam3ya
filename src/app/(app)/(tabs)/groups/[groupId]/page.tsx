@@ -77,7 +77,7 @@ export default async function GroupOverviewPage({ params }: PageProps<"/groups/[
 
   return (
     <main className="flex flex-col gap-4 px-4 pt-4 pb-6">
-      <section className="grid grid-cols-2 divide-x divide-x-reverse divide-line rounded-lg border border-line bg-surface shadow-e1">
+      <section className="grid grid-cols-[repeat(auto-fit,minmax(min(8rem,100%),1fr))] divide-x divide-x-reverse divide-line rounded-lg border border-line bg-surface shadow-e1">
         <div className="flex flex-col gap-0.5 p-4">
           <span className="text-caption text-muted">
             قيمة الاسم · {frequencyLabel(group.frequency)} · {slotsLabel(group.slotCount)}
@@ -107,7 +107,7 @@ export default async function GroupOverviewPage({ params }: PageProps<"/groups/[
           </div>
           <span
             aria-label={requestsLabel(pending)}
-            className="flex h-7 min-w-7 items-center justify-center rounded-full bg-brand-600 px-2 text-caption font-bold text-white"
+            className="flex min-h-7 py-0.5 min-w-7 items-center justify-center rounded-full bg-brand-600 px-2 text-caption font-bold text-white"
           >
             {pending}
           </span>
@@ -117,13 +117,13 @@ export default async function GroupOverviewPage({ params }: PageProps<"/groups/[
 
       {totals && (
         <section aria-labelledby="collect" className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 id="collect" className="text-title-3 text-ink">
               تحصيل الدورة {group.currentCycle}
             </h2>
             <span className="text-caption text-muted">آخر ميعاد {formatDayMonth(totals.dueOn)}</span>
           </div>
-          <p className="flex items-baseline gap-1.5">
+          <p className="flex flex-wrap items-baseline gap-1.5">
             <span className="tabular text-amount-lg text-ink">{formatEGP(totals.collected)}</span>
             <span className="text-body-sm text-muted">من {formatEGP(totals.expected)}</span>
           </p>
@@ -186,17 +186,17 @@ export default async function GroupOverviewPage({ params }: PageProps<"/groups/[
 
       {group.status === "active" && turnSlot && (
         <section aria-labelledby="payout" className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-4 shadow-e1">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 id="payout" className="text-title-3 text-ink">
               {group.currentCycle === 0 ? "أول قبض" : "القبض في الدورة دي"}
             </h2>
-            <span className="rounded-full bg-brand-600 px-2.5 text-[12.5px] leading-6.5 font-semibold text-white">
+            <span className="rounded-full bg-brand-600 px-2.5 text-[0.78125rem] leading-6.5 font-semibold text-white">
               اسم {turnSlot.slotNumber}
             </span>
           </div>
           <ul className="flex flex-col gap-2">
             {turnSlot.owners.map((owner, i) => (
-              <li key={owner.memberId} className="flex items-center justify-between gap-3">
+              <li key={owner.memberId} className="flex flex-wrap items-center justify-between gap-3">
                 <span className="text-body-sm text-body">
                   {owner.name}
                   {owner.isMe && <span className="text-muted"> (إنت)</span>}
@@ -224,7 +224,7 @@ export default async function GroupOverviewPage({ params }: PageProps<"/groups/[
           </h2>
           <div className="flex flex-col divide-y divide-line rounded-lg border border-line bg-surface shadow-e1">
             {group.myShares.map((share) => (
-              <div key={share.slotNumber} className="flex items-center justify-between gap-3 px-4 py-3">
+              <div key={share.slotNumber} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
                 <span className="text-body-sm text-body">
                   اسم {share.slotNumber}{" "}
                   <span className="tabular font-semibold text-ink">{formatEGP(share.amount)}</span>

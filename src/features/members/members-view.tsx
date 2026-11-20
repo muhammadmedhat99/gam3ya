@@ -102,7 +102,7 @@ export function MembersView({
                   type="button"
                   aria-pressed={filter === f.key}
                   onClick={() => setFilter(f.key)}
-                  className={`flex h-11 shrink-0 items-center gap-1.5 rounded-full border-[1.5px] px-4 text-body-sm font-semibold ${
+                  className={`flex min-h-11 py-1.5 shrink-0 items-center gap-1.5 rounded-full border-[1.5px] px-4 text-body-sm font-semibold ${
                     filter === f.key ? "border-ink bg-ink text-white" : "border-line-strong bg-surface text-body"
                   }`}
                 >
@@ -121,29 +121,31 @@ export function MembersView({
 
           <ul className="flex flex-col divide-y divide-line rounded-lg border border-line bg-surface shadow-e1">
             {shown.map((m) => (
-              <li key={m.id} className="flex items-center gap-3 px-4 py-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-2 text-title-3 text-body">
-                  {m.displayName.charAt(0)}
-                </span>
-                <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                  <span className="truncate text-body-sm font-semibold text-ink">
-                    {m.displayName}
-                    {m.isMe && <span className="ms-1.5 text-caption font-normal text-muted">(إنت)</span>}
+              <li key={m.id} className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3">
+                <div className="flex min-w-[min(13rem,100%)] flex-1 items-center gap-3">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-2 text-title-3 text-body">
+                    {m.displayName.charAt(0)}
                   </span>
-                  <span className="text-caption text-muted">
-                    {m.phone && (
-                      <span dir="ltr" className="tabular">
-                        {formatEgyptPhone(m.phone)}
-                      </span>
-                    )}
-                    {m.phone && m.slotNumbers.length > 0 && " · "}
-                    {m.slotNumbers.map((n) => `اسم ${n}`).join(" · ")}
-                    {!m.phone && m.slotNumbers.length === 0 && "لسه ملهوش حصة"}
-                  </span>
+                  <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span className="text-body-sm font-semibold text-ink">
+                      {m.displayName}
+                      {m.isMe && <span className="ms-1.5 text-caption font-normal text-muted">(إنت)</span>}
+                    </span>
+                    <span className="text-caption text-muted">
+                      {m.phone && (
+                        <span dir="ltr" className="tabular">
+                          {formatEgyptPhone(m.phone)}
+                        </span>
+                      )}
+                      {m.phone && m.slotNumbers.length > 0 && " · "}
+                      {m.slotNumbers.map((n) => `اسم ${n}`).join(" · ")}
+                      {!m.phone && m.slotNumbers.length === 0 && "لسه ملهوش حصة"}
+                    </span>
+                  </div>
                 </div>
                 {m.registration && (
                   <span
-                    className={`shrink-0 rounded-full border px-2 text-[12.5px] leading-6 font-semibold ${REG_STYLE[m.registration]}`}
+                    className={`shrink-0 rounded-full border px-2 text-[0.78125rem] leading-6 font-semibold ${REG_STYLE[m.registration]}`}
                   >
                     {REG_LABEL[m.registration]}
                   </span>
@@ -170,7 +172,7 @@ export function MembersView({
         <Button
           size="lg"
           onPress={() => setAdding(true)}
-          className="fixed bottom-[calc(var(--nav-height)+16px)] z-20 h-14 rounded-[18px] shadow-e2 end-[max(1rem,calc(50%-14rem+1rem))]"
+          className="fixed bottom-[calc(var(--nav-height)+16px)] z-20 min-h-14 rounded-[18px] shadow-e2 end-[max(1rem,calc(50%-14rem+1rem))]"
         >
           <PlusIcon />
           ضيف عضو

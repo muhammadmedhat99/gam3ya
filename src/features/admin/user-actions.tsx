@@ -35,7 +35,7 @@ function Field({
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-13 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-base text-ink"
+        className="min-h-13 py-2 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-base text-ink"
       />
     </label>
   );
@@ -82,7 +82,7 @@ export function AdminUserActions({
           {done}
         </Notice>
       )}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(8rem,100%),1fr))] gap-2">
         <Button variant="secondary" onPress={() => setSheet("reset")}>
           Reset كلمة السر
         </Button>

@@ -56,7 +56,7 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
     <>
       <PageHeader title="لوحة صاحب التطبيق" backHref="/profile" />
       <main className="flex flex-col gap-5 px-4 pt-4 pb-8">
-        <section className="grid grid-cols-3 gap-2">
+        <section className="grid grid-cols-[repeat(auto-fit,minmax(min(5.5rem,100%),1fr))] gap-2">
           {[
             ["المستخدمين", stats.users],
             ["جمعيات شغالة", stats.groups.active],
@@ -75,7 +75,7 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
           <h2 id="find" className="text-title-3 text-ink">
             دوّر على مستخدم
           </h2>
-          <form method="get" className="flex gap-2">
+          <form method="get" className="flex flex-wrap gap-2">
             <label className="sr-only" htmlFor="phone">
               رقم الموبايل
             </label>
@@ -87,7 +87,7 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
               dir="ltr"
               defaultValue={phoneInput}
               placeholder="010 1234 5678"
-              className="h-13 min-w-0 flex-1 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-right text-base text-ink"
+              className="min-h-13 py-2 min-w-0 flex-1 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-right text-base text-ink"
             />
             <button type="submit" className="button button--primary h-13">
               دوّر
@@ -109,7 +109,7 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
                 </span>
                 {found.email && <span className="text-caption text-muted">{found.email}</span>}
               </div>
-              <dl className="grid grid-cols-2 gap-2 text-body-sm">
+              <dl className="grid grid-cols-[repeat(auto-fit,minmax(min(8rem,100%),1fr))] gap-2 text-body-sm">
                 <div>
                   <dt className="text-caption text-muted">الحالة</dt>
                   <dd className={found.status === "blocked" ? "font-semibold text-danger" : "font-semibold text-ink"}>
@@ -149,7 +149,7 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
                 ) : (
                   <ul className="flex flex-col gap-1">
                     {found.groups.map((g) => (
-                      <li key={g.id} className="flex items-center justify-between gap-2 text-body-sm">
+                      <li key={g.id} className="flex flex-wrap items-center justify-between gap-2 text-body-sm">
                         <span className="text-ink">{g.name}</span>
                         <span className="rounded-full bg-surface-2 px-2 text-caption text-body">{ROLE[g.role] ?? g.role}</span>
                       </li>

@@ -21,7 +21,7 @@ export default async function PayoutsPage({ params, searchParams }: PageProps<"/
 
   return (
     <main className="flex flex-col gap-3 px-4 pt-4 pb-6">
-      <nav aria-label="اختار الدورة" className="flex items-center justify-between gap-2">
+      <nav aria-label="اختار الدورة" className="flex flex-wrap items-center justify-between gap-2">
         {prev ? (
           <Link href={`${base}?cycle=${prev.number}`} className="button button--ghost" aria-label={`الدورة ${prev.number}`}>
             <BackIcon />

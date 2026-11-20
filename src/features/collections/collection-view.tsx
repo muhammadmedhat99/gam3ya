@@ -55,7 +55,7 @@ export function CollectionView({
             type="button"
             aria-pressed={filter === f.key}
             onClick={() => setFilter(f.key)}
-            className={`flex h-11 shrink-0 items-center gap-1.5 rounded-full border-[1.5px] px-3.5 text-body-sm font-semibold ${
+            className={`flex min-h-11 py-1.5 shrink-0 items-center gap-1.5 rounded-full border-[1.5px] px-3.5 text-body-sm font-semibold ${
               filter === f.key ? "border-ink bg-ink text-white" : "border-line-strong bg-surface text-body"
             }`}
           >
@@ -89,17 +89,19 @@ export function CollectionView({
         <ul className="flex flex-col gap-2">
           {shown.map((row) => (
             <li key={row.obligationId} className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-4 shadow-e1">
-              <div className="flex items-center gap-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-2 text-title-3 text-body">
-                  {row.name.charAt(0)}
-                </span>
-                <div className="flex min-w-0 flex-1 flex-col">
-                  <span className="truncate text-body-sm font-semibold text-ink">{row.name}</span>
-                  <span className="truncate text-caption text-muted">{row.breakdown}</span>
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex min-w-[min(13rem,100%)] flex-1 items-center gap-3">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-2 text-title-3 text-body">
+                    {row.name.charAt(0)}
+                  </span>
+                  <div className="flex min-w-0 flex-1 flex-col">
+                    <span className="text-body-sm font-semibold text-ink">{row.name}</span>
+                    <span className="text-caption text-muted">{row.breakdown}</span>
+                  </div>
                 </div>
                 <PaymentStatusChip status={row.status} />
               </div>
-              <div className="grid grid-cols-3 gap-2 rounded-[12px] bg-surface-2 px-3 py-2.5">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(5.5rem,100%),1fr))] gap-2 rounded-[12px] bg-surface-2 px-3 py-2.5">
                 <Amount label="مستحق" value={row.due} />
                 <Amount label="اتدفع" value={row.paid} />
                 <Amount

@@ -21,7 +21,7 @@ function Segmented({ value, onChange }: { value: "cash" | "transfer"; onChange: 
         {(["cash", "transfer"] as const).map((m) => (
           <label
             key={m}
-            className={`flex h-11 flex-1 cursor-pointer items-center justify-center rounded-[10px] text-[15px] has-focus-visible:ring-2 has-focus-visible:ring-brand-600 ${
+            className={`flex min-h-11 py-1.5 flex-1 cursor-pointer items-center justify-center rounded-[10px] text-[0.9375rem] has-focus-visible:ring-2 has-focus-visible:ring-brand-600 ${
               value === m ? "bg-surface font-bold text-ink shadow-e1" : "font-medium text-muted"
             }`}
           >
@@ -104,7 +104,7 @@ export function RecordPayoutSheet({
         </Notice>
       )}
 
-      <div className="grid grid-cols-3 gap-3 rounded-[14px] bg-surface-2 p-4">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(5.5rem,100%),1fr))] gap-3 rounded-[14px] bg-surface-2 p-4">
         {[
           ["نصيبه", owner.expected],
           ["استلم", owner.received],
@@ -127,7 +127,7 @@ export function RecordPayoutSheet({
             onChange={(e) => setAmount(e.target.value)}
             className="input-group__input min-w-0 flex-1 border-0 bg-transparent text-right outline-none"
           />
-          <span className="text-[15px] font-medium text-muted">ج.م</span>
+          <span className="text-[0.9375rem] font-medium text-muted">ج.م</span>
         </span>
       </label>
       {parsed && (
@@ -147,7 +147,7 @@ export function RecordPayoutSheet({
           value={paidOn}
           max={todayInCairo()}
           onChange={(e) => setPaidOn(e.target.value)}
-          className="h-13 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-base text-ink"
+          className="min-h-13 py-2 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-base text-ink"
         />
       </label>
       <Segmented value={method} onChange={setMethod} />
@@ -207,7 +207,7 @@ export function ReversePayoutSheet({
       }
     >
       {error && <Notice title={error} />}
-      <div className="flex items-center justify-between gap-3 rounded-[14px] bg-surface-2 px-4 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-[14px] bg-surface-2 px-4 py-3">
         <span className="text-body-sm text-body">
           {formatDate(entry.paidOn)}
           {entry.method && ` · ${METHOD[entry.method]}`}

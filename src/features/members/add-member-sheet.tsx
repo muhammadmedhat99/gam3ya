@@ -132,7 +132,7 @@ export function AddMemberSheet({
                 </span>
               </div>
             </div>
-            <dl className="grid grid-cols-2 gap-2 rounded-[12px] bg-surface p-3 text-body-sm">
+            <dl className="grid grid-cols-[repeat(auto-fit,minmax(min(8rem,100%),1fr))] gap-2 rounded-[12px] bg-surface p-3 text-body-sm">
               <div>
                 <dt className="text-caption text-muted">إنت كتبت</dt>
                 <dd className="font-semibold text-ink">{existing.values.displayName}</dd>

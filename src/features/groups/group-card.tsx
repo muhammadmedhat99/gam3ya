@@ -36,7 +36,7 @@ export function GroupListCard({ group }: { group: GroupSummary }) {
       className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-4 shadow-e1 outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
     >
       <GroupCardHeader group={group} />
-      <div className="flex gap-1.5">
+      <div className="flex flex-wrap gap-1.5">
         <RoleChip role={group.role} />
         <GroupStatusChip status={group.status} />
       </div>
@@ -46,7 +46,7 @@ export function GroupListCard({ group }: { group: GroupSummary }) {
         </p>
       ) : (
         <div className="flex flex-col gap-1.5">
-          <div className="flex items-center justify-between gap-2 text-caption">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-caption">
             <span className="font-semibold text-body">
               الدورة {group.currentCycle} من {group.totalCycles}
             </span>
@@ -73,7 +73,7 @@ export function GroupHomeCard({ group }: { group: GroupSummary }) {
       className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-4 shadow-e1 outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
     >
       <GroupCardHeader group={group} />
-      <div className="flex items-center gap-1.5">
+      <div className="flex flex-wrap items-center gap-1.5">
         <RoleChip role={group.role} />
         {group.status === "active" ? (
           <span className="text-caption font-semibold text-body">
@@ -85,7 +85,7 @@ export function GroupHomeCard({ group }: { group: GroupSummary }) {
       </div>
 
       {group.currentTurn && (
-        <div className="flex items-center justify-between gap-3 rounded-[12px] bg-surface-2 px-3 py-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-[12px] bg-surface-2 px-3 py-2.5">
           <div className="flex flex-col">
             <span className="text-caption text-muted">دور مين المرة دي؟</span>
             <span className="text-body-sm font-semibold text-ink">
@@ -100,7 +100,7 @@ export function GroupHomeCard({ group }: { group: GroupSummary }) {
         <div className="flex flex-col gap-2">
           <span className="text-caption font-semibold text-muted">نصيبك</span>
           {group.myShares.map((share) => (
-            <div key={share.slotNumber} className="flex items-center justify-between gap-3">
+            <div key={share.slotNumber} className="flex flex-wrap items-center justify-between gap-3">
               <span className="text-body-sm text-body">
                 اسم {share.slotNumber}{" "}
                 <span className="tabular font-semibold text-ink">{formatEGP(share.amount)}</span>

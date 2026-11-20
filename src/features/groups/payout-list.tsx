@@ -27,12 +27,12 @@ function Row({ slot, isCurrent, isPast }: { slot: SlotRow; isCurrent: boolean; i
         <div className="flex flex-wrap items-center gap-1.5">
           <span className={`text-body-sm font-semibold ${isPast ? "text-muted" : "text-ink"}`}>اسم {slot.slotNumber}</span>
           {isCurrent && (
-            <span className="rounded-full bg-brand-600 px-2 text-[12.5px] leading-[22px] font-semibold text-white">
+            <span className="rounded-full bg-brand-600 px-2 text-[0.78125rem] leading-[22px] font-semibold text-white">
               الدورة دي
             </span>
           )}
           {mine && !isPast && (
-            <span className="rounded-full border border-brand-100 bg-brand-50 px-2 text-[12.5px] leading-[22px] font-semibold text-brand-700">
+            <span className="rounded-full border border-brand-100 bg-brand-50 px-2 text-[0.78125rem] leading-[22px] font-semibold text-brand-700">
               دورك
             </span>
           )}

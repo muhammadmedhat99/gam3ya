@@ -77,7 +77,7 @@ export function DeleteGroup({
               value={typed}
               onChange={(e) => setTyped(e.target.value)}
               autoComplete="off"
-              className="h-13 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-base text-ink"
+              className="min-h-13 py-2 rounded-[12px] border-[1.5px] border-line-strong bg-surface px-3.5 text-base text-ink"
             />
           </label>
         </BottomSheet>

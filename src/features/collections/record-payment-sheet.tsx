@@ -93,7 +93,7 @@ export function RecordPaymentSheet({
     >
       {formError && <Notice title={formError} />}
 
-      <div className="grid grid-cols-3 gap-3 rounded-[14px] bg-surface-2 p-4">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(5.5rem,100%),1fr))] gap-3 rounded-[14px] bg-surface-2 p-4">
         <Stat label="المستحق" value={formatEGP(row.due)} />
         <Stat label="اتدفع قبل كده" value={formatEGP(row.paid)} />
         <Stat label="الباقي" value={formatEGP(row.outstanding)} strong />
@@ -126,7 +126,7 @@ export function RecordPaymentSheet({
         {amount && (
           <div
             aria-live="polite"
-            className="flex items-center justify-between gap-3 rounded-[14px] border border-line px-4 py-3"
+            className="flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-line px-4 py-3"
           >
             <span className="text-body-sm text-muted">بعد التسجيل:</span>
             {tooMuch ? (
@@ -160,7 +160,7 @@ export function RecordPaymentSheet({
                 ).map(([value, label]) => (
                   <label
                     key={value}
-                    className={`flex h-11 flex-1 cursor-pointer items-center justify-center rounded-[10px] text-[15px] has-focus-visible:ring-2 has-focus-visible:ring-brand-600 ${
+                    className={`flex min-h-11 py-1.5 flex-1 cursor-pointer items-center justify-center rounded-[10px] text-[0.9375rem] has-focus-visible:ring-2 has-focus-visible:ring-brand-600 ${
                       field.value === value ? "bg-surface font-bold text-ink shadow-e1" : "font-medium text-muted"
                     }`}
                   >

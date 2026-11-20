@@ -27,7 +27,7 @@ export function GroupTabs({ groupId, tabs }: { groupId: string; tabs: GroupTab[]
             key={tab.segment}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`relative flex h-12 shrink-0 items-center border-b-[3px] px-3.5 text-[15px] whitespace-nowrap ${
+            className={`relative flex h-12 shrink-0 items-center border-b-[3px] px-3.5 text-[0.9375rem] whitespace-nowrap ${
               active ? "border-brand-600 font-bold text-brand-700" : "border-transparent font-medium text-muted"
             }`}
           >

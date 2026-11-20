@@ -65,7 +65,7 @@ export function StartGroupButton({
               ["أول تحصيل", summary.firstDue],
               ["آخر تحصيل", summary.lastDue],
             ].map(([label, value]) => (
-              <div key={label} className="flex items-center justify-between gap-3 border-b border-line py-2.5 last:border-b-0">
+              <div key={label} className="flex flex-wrap items-center justify-between gap-3 border-b border-line py-2.5 last:border-b-0">
                 <dt className="text-body-sm text-muted">{label}</dt>
                 <dd className="tabular text-body-sm font-semibold text-ink">{value}</dd>
               </div>

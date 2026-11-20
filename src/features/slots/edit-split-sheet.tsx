@@ -106,13 +106,13 @@ export function EditSplitSheet({
       {error && <Notice title={error} />}
 
       <div aria-live="polite" className={`flex flex-col gap-2 rounded-[14px] border px-4 py-3.5 ${tone}`}>
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-label">{remaining < 0n ? "زيادة" : "الباقي"}</p>
           <p className="tabular">
-            <span className="text-[24px] leading-8 font-bold">
+            <span className="text-[1.5rem] leading-8 font-bold">
               {formatAmount(fromPiasters(remaining < 0n ? -remaining : remaining))}
             </span>{" "}
-            <span className="text-[15px] font-medium">ج.م</span>
+            <span className="text-[0.9375rem] font-medium">ج.م</span>
           </p>
         </div>
         <div
@@ -135,7 +135,7 @@ export function EditSplitSheet({
         {rows.length === 0 && <p className="text-body-sm text-muted">الاسم ده لسه ملوش أصحاب.</p>}
         {rows.map((row, i) => (
           <div key={row.memberId} className="flex items-center gap-2.5">
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-[15px] font-bold text-body">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-[0.9375rem] font-bold text-body">
               {row.name.charAt(0)}
             </span>
             <TextField
@@ -152,7 +152,7 @@ export function EditSplitSheet({
                   placeholder="0"
                   className="input-group__input min-w-0 flex-1 border-0 bg-transparent text-right outline-none"
                 />
-                <span className="text-[15px] font-medium text-muted">ج.م</span>
+                <span className="text-[0.9375rem] font-medium text-muted">ج.م</span>
               </div>
             </TextField>
             <Button
@@ -186,7 +186,7 @@ export function EditSplitSheet({
                   const m = members.find((x) => x.id === e.target.value);
                   if (m) setRows((rs) => [...rs, { memberId: m.id, name: m.name, amount: "" }]);
                 }}
-                className="h-12 w-full appearance-none rounded-[12px] border-[1.5px] border-line-strong bg-surface ps-11 pe-4 text-[15px] font-semibold text-brand-700"
+                className="h-12 w-full appearance-none rounded-[12px] border-[1.5px] border-line-strong bg-surface ps-11 pe-4 text-[0.9375rem] font-semibold text-brand-700"
               >
                 <option value="">اختار عضو…</option>
                 {available.map((m) => (

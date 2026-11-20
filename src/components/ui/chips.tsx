@@ -6,7 +6,7 @@ import { CheckIcon, CycleIcon, PencilIcon, ShieldCheckIcon, UserIcon } from "./i
 function Chip({ className, icon, children }: { className: string; icon?: ReactNode; children: ReactNode }) {
   return (
     <span
-      className={`inline-flex h-[26px] items-center gap-1 rounded-full border px-[9px] text-[12.5px] font-semibold ${className}`}
+      className={`inline-flex min-h-[26px] py-0.5 items-center gap-1 rounded-full border px-[9px] text-[0.78125rem] font-semibold ${className}`}
     >
       {icon}
       {children}

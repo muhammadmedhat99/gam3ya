@@ -79,7 +79,7 @@ export function ReversePaymentSheet({
       }
     >
       {error && <Notice title={error} />}
-      <div className="flex items-center justify-between gap-3 rounded-[14px] bg-surface-2 px-4 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-[14px] bg-surface-2 px-4 py-3">
         <div className="flex flex-col">
           <span className="text-caption text-muted">الدفعة الأصلية</span>
           <span className="text-body-sm text-body">
@@ -103,7 +103,7 @@ export function ReversePaymentSheet({
         />
       </TextField>
 
-      <div className="flex items-center justify-between gap-3 rounded-[14px] border border-line px-4 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-line px-4 py-3">
         <span className="text-body-sm text-muted">بعد التصحيح:</span>
         <span className="flex items-center gap-2">
           <PaymentStatusChip status={afterStatus} />
